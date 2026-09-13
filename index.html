@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#7F011F" />
+<meta name="color-scheme" content="light" />
+<meta name="description" content="Achète et revends tes places d'abonnements en toute confiance." />
+<meta name="format-detection" content="telephone=no" />
+
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="sub.ci" />
+
+<meta property="og:type" content="website" />
+<meta property="og:title" content="sub.ci — abonnements en cercle" />
+<meta property="og:description" content="Achète et revends tes places d'abonnements en toute confiance." />
+<meta property="og:image" content="/icon-512.png" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="sub.ci — abonnements en cercle" />
+<meta name="twitter:description" content="Achète et revends tes places d'abonnements en toute confiance." />
+<meta name="twitter:image" content="/icon-512.png" />
+
+<link rel="apple-touch-icon" href="/icon-192.png" />
+<link rel="icon" href="/icon-192.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<title>sub.ci</title>
+<style>
+  html, body { margin: 0; padding: 0; background: #E9D8AC; overscroll-behavior: none; }
+  body { font-family: 'Manrope', sans-serif; }
+  #root { min-height: 100vh; min-height: 100dvh; }
+  *::-webkit-scrollbar { display: none; }
+  * { scrollbar-width: none; }
+  @keyframes toastIn { from { opacity: 0; transform: translate(-50%, 10px); } to { opacity: 1; transform: translate(-50%, 0); } }
+  @keyframes popIn { from { opacity: 0; transform: scale(.6); } to { opacity: 1; transform: scale(1); } }
+
+  /* On a phone (or installed as a PWA) the shell just fills the screen.
+     On a wider browser it's presented as a centered, framed phone-width card
+     instead of stretching every row edge-to-edge. */
+  .app-shell {
+    position: relative;
+    max-width: 480px;
+    margin: 0 auto;
+    min-height: 100vh;
+    min-height: 100dvh;
+    overflow: hidden;
+  }
+  @media (min-width: 560px) {
+    .app-shell {
+      margin: 28px auto;
+      min-height: 0;
+      height: min(900px, calc(100dvh - 56px));
+      border-radius: 32px;
+      box-shadow: 0 24px 60px rgba(28,27,31,.25), 0 0 0 1px rgba(28,27,31,.06);
+    }
+  }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<noscript>Active JavaScript pour utiliser sub.ci.</noscript>
+<script type="module" src="/src/main.jsx"></script>
+</body>
+</html>

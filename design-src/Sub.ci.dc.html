@@ -1,0 +1,1236 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+@keyframes toastIn{from{opacity:0;transform:translate(-50%,10px)}to{opacity:1;transform:translate(-50%,0)}}
+@keyframes popIn{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:scale(1)}}
+*::-webkit-scrollbar{display:none}
+*{scrollbar-width:none}
+</style>
+</helmet>
+<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;background:#E9D8AC;padding:48px 24px;box-sizing:border-box;font-family:'Manrope',sans-serif">
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" hint-size="402,874">
+<div style="height:100%;display:flex;flex-direction:column;position:relative;background:#F5EBD0;font-family:'Manrope',sans-serif;color:#1C1B1F">
+
+<sc-if value="{{notAuthed}}" hint-placeholder-val="{{true}}">
+<div style="position:absolute;inset:0;background:#7F011F;z-index:500;display:flex;flex-direction:column;justify-content:center;padding:32px;box-sizing:border-box;overflow:auto">
+<div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:30px;color:#F5EBD0;margin-bottom:6px">sub<span style="color:#F5EBD0;opacity:.6">.ci</span></div>
+<div style="font-size:14px;color:#F5EBD0;opacity:.85;margin-bottom:28px;line-height:1.5">Achète et revends tes places d'abonnements en toute confiance.</div>
+
+<div style="display:flex;background:rgba(245,235,208,0.15);border-radius:12px;padding:4px;margin-bottom:22px">
+<div onClick="{{goLoginScreen}}" style="flex:1;text-align:center;padding:10px;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer;background:{{loginTabBg}};color:{{loginTabFg}}">Se connecter</div>
+<div onClick="{{goSignupScreen}}" style="flex:1;text-align:center;padding:10px;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer;background:{{signupTabBg}};color:{{signupTabFg}}">Créer un compte</div>
+</div>
+
+<sc-if value="{{isLoginScreen}}" hint-placeholder-val="{{true}}">
+<div style="display:flex;flex-direction:column;gap:6px;margin-bottom:14px">
+<label style="font-size:12.5px;font-weight:700;color:#F5EBD0">Email ou numéro</label>
+<input value="{{loginId}}" onChange="{{setLoginId}}" placeholder="awa.kone@gmail.com" style="border:none;border-radius:12px;padding:14px;font-family:'Manrope',sans-serif;font-size:14px;background:#F5EBD0;box-sizing:border-box"/>
+</div>
+<div style="display:flex;flex-direction:column;gap:6px;margin-bottom:6px">
+<label style="font-size:12.5px;font-weight:700;color:#F5EBD0">Mot de passe</label>
+<input type="password" value="{{loginPassword}}" onChange="{{setLoginPassword}}" placeholder="••••••••" style="border:none;border-radius:12px;padding:14px;font-family:'Manrope',sans-serif;font-size:14px;background:#F5EBD0;box-sizing:border-box"/>
+</div>
+<div style="text-align:right;font-size:12px;color:#F5EBD0;opacity:.8;margin-bottom:20px;cursor:pointer">Mot de passe oublié ?</div>
+<div onClick="{{login}}" style="text-align:center;padding:15px;border-radius:14px;background:#F5EBD0;color:#7F011F;font-weight:700;font-size:15px;cursor:pointer">Se connecter</div>
+</sc-if>
+
+<sc-if value="{{isSignupScreen}}" hint-placeholder-val="{{false}}">
+<div style="display:flex;flex-direction:column;gap:6px;margin-bottom:14px">
+<label style="font-size:12.5px;font-weight:700;color:#F5EBD0">Nom complet</label>
+<input value="{{signupName}}" onChange="{{setSignupName}}" placeholder="Awa Koné" style="border:none;border-radius:12px;padding:14px;font-family:'Manrope',sans-serif;font-size:14px;background:#F5EBD0;box-sizing:border-box"/>
+</div>
+<div style="display:flex;flex-direction:column;gap:6px;margin-bottom:14px">
+<label style="font-size:12.5px;font-weight:700;color:#F5EBD0">Email ou numéro</label>
+<input value="{{signupId}}" onChange="{{setSignupId}}" placeholder="awa.kone@gmail.com" style="border:none;border-radius:12px;padding:14px;font-family:'Manrope',sans-serif;font-size:14px;background:#F5EBD0;box-sizing:border-box"/>
+</div>
+<div style="display:flex;flex-direction:column;gap:6px;margin-bottom:20px">
+<label style="font-size:12.5px;font-weight:700;color:#F5EBD0">Mot de passe</label>
+<input type="password" value="{{signupPassword}}" onChange="{{setSignupPassword}}" placeholder="••••••••" style="border:none;border-radius:12px;padding:14px;font-family:'Manrope',sans-serif;font-size:14px;background:#F5EBD0;box-sizing:border-box"/>
+</div>
+<div onClick="{{signup}}" style="text-align:center;padding:15px;border-radius:14px;background:#F5EBD0;color:#7F011F;font-weight:700;font-size:15px;cursor:pointer">Créer mon compte</div>
+</sc-if>
+
+<div style="text-align:center;font-size:12px;color:#F5EBD0;opacity:.7;margin-top:18px">En continuant, tu acceptes les conditions d'utilisation de sub.ci.</div>
+</div>
+</sc-if>
+
+<div style="flex:1;overflow:auto;display:flex;flex-direction:column">
+
+<div style="padding:58px 20px 12px;display:flex;align-items:center;justify-content:space-between;flex:none">
+<sc-if value="{{isMarket}}" hint-placeholder-val="{{true}}">
+<div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:22px;letter-spacing:-0.4px">sub<span style="color:#7F011F">.ci</span></div>
+</sc-if>
+<sc-if value="{{showBack}}" hint-placeholder-val="{{false}}">
+<div onClick="{{goMarket}}" style="width:38px;height:38px;border-radius:50%;background:#FFFFFF;border:1px solid #E8DCC0;display:flex;align-items:center;justify-content:center;cursor:pointer">
+<svg width="9" height="15" viewBox="0 0 9 15" fill="none"><path d="M8 1L1 7.5 8 14" stroke="#1C1B1F" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+</div>
+</sc-if>
+<div onClick="{{goProfile}}" style="width:38px;height:38px;border-radius:50%;background:#7F011F;color:#F5EBD0;display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:15px;cursor:pointer">A</div>
+</div>
+
+<sc-if value="{{isMarket}}" hint-placeholder-val="{{true}}">
+<div style="position:absolute;top:58px;right:64px;z-index:5">
+<div onClick="{{toggleNotif}}" style="width:38px;height:38px;border-radius:50%;background:#FFFFFF;border:1px solid #E8DCC0;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 3C9 3 7 5.5 7 8.5V12L5 15V16H19V15L17 12V8.5C17 5.5 15 3 12 3Z" stroke="#1C1B1F" stroke-width="1.6" stroke-linejoin="round"/><path d="M10 18a2 2 0 0 0 4 0" stroke="#1C1B1F" stroke-width="1.6" stroke-linecap="round"/></svg>
+<sc-if value="{{hasUnread}}" hint-placeholder-val="{{true}}">
+<div style="position:absolute;top:6px;right:7px;width:8px;height:8px;border-radius:50%;background:#7F011F;border:1.5px solid #FFFFFF"></div>
+</sc-if>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{notifOpen}}" hint-placeholder-val="{{false}}">
+<div style="position:absolute;inset:0;background:rgba(28,27,31,0.35);z-index:150" onClick="{{toggleNotif}}"></div>
+<div style="position:absolute;top:104px;right:20px;left:20px;background:#FFFFFF;border:1px solid #E8DCC0;border-radius:16px;padding:14px;z-index:160;box-shadow:0 12px 30px rgba(28,27,31,0.15);display:flex;flex-direction:column;gap:10px">
+<div style="font-weight:700;font-size:14px">Notifications</div>
+<sc-for list="{{notifications}}" as="n" hint-placeholder-count="2">
+<div style="display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-top:1px solid #F0EAD8">
+<div style="width:8px;height:8px;border-radius:50%;background:#7F011F;margin-top:5px;flex:none"></div>
+<div>
+<div style="font-size:13px;font-weight:700">{{n.title}}</div>
+<div style="font-size:12px;color:#8A8578;margin-top:2px;line-height:1.4">{{n.body}}</div>
+</div>
+</div>
+</sc-for>
+</div>
+</sc-if>
+
+<sc-if value="{{isMarket}}" hint-placeholder-val="{{true}}">
+<div style="padding:4px 20px 4px;flex:none">
+<div style="font-size:13px;color:#5A564C;margin-bottom:2px">Bonjour Awa</div>
+<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+<div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:19px">Ton résumé</div>
+<sc-if value="{{isHostEligible}}" hint-placeholder-val="{{false}}">
+<div onClick="{{toggleHostMode}}" style="display:flex;align-items:center;gap:8px;background:#FFFFFF;border:1px solid #E8DCC0;border-radius:999px;padding:4px;cursor:pointer">
+<div style="padding:6px 10px;border-radius:999px;font-size:11.5px;font-weight:700;background:{{buyerModeBg}};color:{{buyerModeFg}}">Acheteur</div>
+<div style="padding:6px 10px;border-radius:999px;font-size:11.5px;font-weight:700;background:{{hostModeBg}};color:{{hostModeFg}}">Host</div>
+</div>
+</sc-if>
+</div>
+<div onClick="{{goBrowse}}" style="display:flex;align-items:center;gap:8px;background:#FFFFFF;border:1px solid #E8DCC0;border-radius:14px;padding:12px 14px;margin-bottom:14px;cursor:pointer">
+<svg width="15" height="15" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="#8A8578" stroke-width="2"/><path d="M21 21l-4.3-4.3" stroke="#8A8578" stroke-width="2" stroke-linecap="round"/></svg>
+<span style="font-size:14px;color:#8A8578;flex:1">Netflix, Spotify, Canal+...</span>
+</div>
+<div style="display:flex;gap:10px;margin-bottom:14px">
+<div style="flex:1;background:#7F011F;border-radius:16px;padding:14px;color:#F5EBD0">
+<div style="font-size:11.5px;opacity:.8;font-weight:600">Abonnements actifs</div>
+<div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:24px;margin-top:4px">{{activeCount}}</div>
+<div style="font-size:11.5px;opacity:.8;margin-top:2px">{{monthlySpendDisplay}}/mois</div>
+</div>
+<div style="flex:1;background:#FFFFFF;border:1px solid #E8DCC0;border-radius:16px;padding:14px">
+<div style="font-size:11.5px;color:#8A8578;font-weight:600">Ventes réalisées</div>
+<div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:24px;margin-top:4px;color:#1C1B1F">{{salesCount}}</div>
+<div style="font-size:11.5px;color:#8A8578;margin-top:2px">via tes annonces</div>
+</div>
+</div>
+</div>
+
+<sc-if value="{{hasActive}}" hint-placeholder-val="{{false}}">
+<div style="padding:20px 20px 0;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:15px;flex:none">Tes abonnements actifs</div>
+<div style="display:flex;flex-direction:column;gap:10px;padding:10px 20px 0">
+<sc-for list="{{purchasedDisplay}}" as="p" hint-placeholder-count="1">
+<div onClick="{{p.onClick}}" style="display:flex;align-items:center;gap:12px;background:#FFFFFF;border:1px solid #E8DCC0;border-radius:16px;padding:12px 14px;cursor:pointer">
+<div style="width:38px;height:38px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;color:#FFFFFF;background:{{p.color}}">{{p.letter}}</div>
+<div style="flex:1">
+<div style="font-weight:700;font-size:13.5px">{{p.service}} — {{p.plan}}</div>
+<div style="font-size:11.5px;color:#8A8578;margin-top:2px">{{p.priceDisplay}} · jusqu'au {{p.until}}</div>
+</div>
+<div style="font-size:10.5px;font-weight:700;color:#1F8A5D;background:#F1F7F3;padding:4px 8px;border-radius:6px">{{p.status}}</div>
+</div>
+</sc-for>
+</div>
+</sc-if>
+</sc-if>
+
+<sc-if value="{{isBrowse}}" hint-placeholder-val="{{false}}">
+<div style="padding:14px 20px 0;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:19px;flex:none">Tous les abonnements</div>
+<div style="padding:0 20px 4px;flex:none">
+<div style="display:flex;align-items:center;gap:8px;background:#FFFFFF;border:1px solid #E8DCC0;border-radius:14px;padding:11px 14px">
+<svg width="15" height="15" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="#8A8578" stroke-width="2"/><path d="M21 21l-4.3-4.3" stroke="#8A8578" stroke-width="2" stroke-linecap="round"/></svg>
+<input value="{{searchQuery}}" onChange="{{setSearchQuery}}" placeholder="Netflix, Spotify, Canal+..." style="border:none;outline:none;background:transparent;font-family:'Manrope',sans-serif;font-size:14px;color:#1C1B1F;flex:1"/>
+</div>
+</div>
+<div style="display:flex;gap:8px;overflow-x:auto;padding:14px 20px 6px;flex:none">
+<sc-for list="{{filters}}" as="f" hint-placeholder-count="7">
+<div onClick="{{f.onClick}}" style="flex:none;padding:8px 14px;border-radius:999px;font-size:12.5px;font-weight:700;white-space:nowrap;cursor:pointer;background:{{f.bg}};color:{{f.fg}};border:1px solid {{f.border}}">{{f.name}}</div>
+</sc-for>
+</div>
+<div style="display:flex;gap:8px;overflow-x:auto;padding:0 20px 6px;flex:none">
+<sc-for list="{{sortOptions}}" as="so" hint-placeholder-count="3">
+<div onClick="{{so.onClick}}" style="flex:none;display:flex;align-items:center;gap:5px;padding:7px 12px;border-radius:999px;font-size:12px;font-weight:700;white-space:nowrap;cursor:pointer;background:{{so.bg}};color:{{so.fg}};border:1px solid {{so.border}}">{{so.name}}</div>
+</sc-for>
+</div>
+<div style="display:flex;flex-direction:column;gap:12px;padding:6px 20px 24px">
+<sc-for list="{{listings}}" as="l" hint-placeholder-count="4">
+<div onClick="{{l.onClick}}" style="display:flex;align-items:center;gap:14px;background:#FFFFFF;border:1px solid #E8DCC0;border-radius:18px;padding:14px;cursor:pointer">
+<div style="width:48px;height:48px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:18px;color:#FFFFFF;background:{{l.color}}">{{l.letter}}</div>
+<div style="flex:1;min-width:0">
+<div style="font-weight:700;font-size:15px">{{l.service}}</div>
+<div style="font-size:12.5px;color:#8A8578;margin-top:1px">{{l.plan}}</div>
+<div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:15px;margin-top:6px">{{l.priceDisplay}}</div>
+<div style="margin-top:6px;display:inline-block;padding:3px 8px;border-radius:6px;font-size:11px;font-weight:700;background:{{l.seatsBg}};color:{{l.seatsFg}}">{{l.seatsLabel}}</div>
+</div>
+<svg width="8" height="14" viewBox="0 0 8 14" fill="none" style="flex:none"><path d="M1 1l6 6-6 6" stroke="#C4B48A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+</div>
+</sc-for>
+<sc-if value="{{noResults}}" hint-placeholder-val="{{false}}">
+<div style="text-align:center;color:#8A8578;font-size:13px;padding:30px 0">Aucune offre ne correspond à ta recherche.</div>
+</sc-if>
+</div>
+</sc-if>
+
+<sc-if value="{{isSell}}" hint-placeholder-val="{{false}}">
+<div style="padding:4px 20px 30px;display:flex;flex-direction:column;gap:16px">
+
+<sc-if value="{{kycNeeded}}" hint-placeholder-val="{{false}}">
+<div>
+<div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:19px">Vérifie ton identité</div>
+<div style="font-size:13px;color:#8A8578;margin-top:4px;line-height:1.5">Pour protéger les acheteurs, on vérifie l'identité de chaque vendeur avant la première publication.</div>
+</div>
+<div style="display:flex;flex-direction:column;gap:6px">
+<label style="font-size:12.5px;font-weight:700;color:#5A564C">Nom complet</label>
+<input value="{{kycName}}" onChange="{{setKycName}}" placeholder="Awa Koné" style="border:1px solid #E8DCC0;border-radius:12px;padding:12px 14px;font-family:'Manrope',sans-serif;font-size:14px;background:#FFFFFF;color:#1C1B1F;box-sizing:border-box"/>
+</div>
+<div style="display:flex;flex-direction:column;gap:6px">
+<label style="font-size:12.5px;font-weight:700;color:#5A564C">Numéro Mobile Money (pour recevoir tes paiements)</label>
+<input value="{{kycPhone}}" onChange="{{setKycPhone}}" placeholder="07 00 00 00 00" style="border:1px solid #E8DCC0;border-radius:12px;padding:12px 14px;font-family:'Manrope',sans-serif;font-size:14px;background:#FFFFFF;color:#1C1B1F;box-sizing:border-box"/>
+</div>
+<div onClick="{{toggleKycDoc}}" style="border:1.5px dashed {{kycDocBorder}};border-radius:14px;padding:20px;text-align:center;cursor:pointer;background:{{kycDocBg}}">
+<sc-if value="{{kycDocUploaded}}" hint-placeholder-val="{{false}}">
+<div style="font-size:13px;font-weight:700;color:#1F8A5D">✓ Pièce d'identité ajoutée</div>
+</sc-if>
+<sc-if value="{{kycDocMissing}}" hint-placeholder-val="{{true}}">
+<div style="font-size:13px;font-weight:700;color:#5A564C">Ajouter une photo de ta pièce d'identité</div>
+<div style="font-size:11.5px;color:#8A8578;margin-top:3px">Recto, lisible, non expirée</div>
+</sc-if>
+</div>
+<button onClick="{{submitKyc}}" disabled="{{kycDisabled}}" style="border:none;border-radius:14px;padding:15px;font-family:'Manrope',sans-serif;font-weight:700;font-size:15px;color:#FFFFFF;background:{{kycBtnBg}};cursor:pointer;opacity:{{kycBtnOpacity}}">Soumettre pour vérification</button>
+</sc-if>
+
+<sc-if value="{{kycCheckingSub}}" hint-placeholder-val="{{false}}">
+<div>
+<div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:19px">Vérifie ton abonnement</div>
+<div style="font-size:13px;color:#8A8578;margin-top:4px;line-height:1.5">On confirme que l'abonnement que tu veux partager fonctionne bien avant de créer ton cercle.</div>
+</div>
+<div style="display:flex;flex-direction:column;gap:6px">
+<label style="font-size:12.5px;font-weight:700;color:#5A564C">Service</label>
+<select value="{{sellService}}" onChange="{{setSellService}}" style="border:1px solid #E8DCC0;border-radius:12px;padding:12px 14px;font-family:'Manrope',sans-serif;font-size:14px;background:#FFFFFF;color:#1C1B1F">
+<sc-for list="{{serviceOptions}}" as="opt" hint-placeholder-count="7">
+<option value="{{opt}}">{{opt}}</option>
+</sc-for>
+</select>
+</div>
+<sc-if value="{{sellIsLink}}" hint-placeholder-val="{{false}}">
+<div style="display:flex;flex-direction:column;gap:6px">
+<label style="font-size:12.5px;font-weight:700;color:#5A564C">Lien d'invitation</label>
+<input value="{{sellAccessLink}}" onChange="{{setSellAccessLink}}" placeholder="https://..." style="border:1px solid #E8DCC0;border-radius:12px;padding:12px 14px;font-family:'Manrope',sans-serif;font-size:14px;background:#FFFFFF;color:#1C1B1F;box-sizing:border-box"/>
+</div>
+</sc-if>
+<sc-if value="{{sellIsCredentials}}" hint-placeholder-val="{{true}}">
+<div style="display:flex;flex-direction:column;gap:6px">
+<label style="font-size:12.5px;font-weight:700;color:#5A564C">Email du compte</label>
+<input value="{{sellAccessEmail}}" onChange="{{setSellAccessEmail}}" placeholder="compte.partage@gmail.com" style="border:1px solid #E8DCC0;border-radius:12px;padding:12px 14px;font-family:'Manrope',sans-serif;font-size:14px;background:#FFFFFF;color:#1C1B1F;box-sizing:border-box"/>
+</div>
+<div style="display:flex;flex-direction:column;gap:6px">
+<label style="font-size:12.5px;font-weight:700;color:#5A564C">Mot de passe du compte</label>
+<input value="{{sellAccessPassword}}" onChange="{{setSellAccessPassword}}" placeholder="Mot de passe" style="border:1px solid #E8DCC0;border-radius:12px;padding:12px 14px;font-family:'Manrope',sans-serif;font-size:14px;background:#FFFFFF;color:#1C1B1F;box-sizing:border-box"/>
+</div>
+</sc-if>
+<button onClick="{{verifySubscription}}" disabled="{{subCheckDisabled}}" style="border:none;border-radius:14px;padding:15px;font-family:'Manrope',sans-serif;font-weight:700;font-size:15px;color:#FFFFFF;background:{{subCheckBtnBg}};cursor:pointer;opacity:{{subCheckBtnOpacity}}">Vérifier mon abonnement</button>
+</sc-if>
+
+<sc-if value="{{kycVerifiedAndSelling}}" hint-placeholder-val="{{true}}">
+<sc-if value="{{sellNotSubmitted}}" hint-placeholder-val="{{true}}">
+<div>
+<div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:19px">{{sellHeading}}</div>
+<div style="font-size:13px;color:#8A8578;margin-top:4px;line-height:1.5">Définis les places disponibles dans ton cercle et le prix par membre.</div>
+</div>
+<div style="display:flex;flex-direction:column;gap:6px">
+<label style="font-size:12.5px;font-weight:700;color:#5A564C">Service</label>
+<select value="{{sellService}}" onChange="{{setSellService}}" style="border:1px solid #E8DCC0;border-radius:12px;padding:12px 14px;font-family:'Manrope',sans-serif;font-size:14px;background:#FFFFFF;color:#1C1B1F">
+<sc-for list="{{serviceOptions}}" as="opt" hint-placeholder-count="7">
+<option value="{{opt}}">{{opt}}</option>
+</sc-for>
+</select>
+</div>
+<div style="display:flex;flex-direction:column;gap:6px">
+<label style="font-size:12.5px;font-weight:700;color:#5A564C">Formule / type de place</label>
+<input value="{{sellPlan}}" onChange="{{setSellPlan}}" placeholder="Ex: Premium 4 écrans, 1 place" style="border:1px solid #E8DCC0;border-radius:12px;padding:12px 14px;font-family:'Manrope',sans-serif;font-size:14px;background:#FFFFFF;color:#1C1B1F;box-sizing:border-box"/>
+</div>
+
+<sc-if value="{{sellIsLink}}" hint-placeholder-val="{{false}}">
+<div style="display:flex;flex-direction:column;gap:6px">
+<label style="font-size:12.5px;font-weight:700;color:#5A564C">Lien d'invitation</label>
+<input value="{{sellAccessLink}}" onChange="{{setSellAccessLink}}" placeholder="https://..." style="border:1px solid #E8DCC0;border-radius:12px;padding:12px 14px;font-family:'Manrope',sans-serif;font-size:14px;background:#FFFFFF;color:#1C1B1F;box-sizing:border-box"/>
+</div>
+</sc-if>
+<sc-if value="{{sellIsCredentials}}" hint-placeholder-val="{{true}}">
+<div style="display:flex;flex-direction:column;gap:6px">
+<label style="font-size:12.5px;font-weight:700;color:#5A564C">Email du compte</label>
+<input value="{{sellAccessEmail}}" onChange="{{setSellAccessEmail}}" placeholder="compte.partage@gmail.com" style="border:1px solid #E8DCC0;border-radius:12px;padding:12px 14px;font-family:'Manrope',sans-serif;font-size:14px;background:#FFFFFF;color:#1C1B1F;box-sizing:border-box"/>
+</div>
+<div style="display:flex;flex-direction:column;gap:6px">
+<label style="font-size:12.5px;font-weight:700;color:#5A564C">Mot de passe du compte</label>
+<input value="{{sellAccessPassword}}" onChange="{{setSellAccessPassword}}" placeholder="Mot de passe" style="border:1px solid #E8DCC0;border-radius:12px;padding:12px 14px;font-family:'Manrope',sans-serif;font-size:14px;background:#FFFFFF;color:#1C1B1F;box-sizing:border-box"/>
+</div>
+</sc-if>
+<div style="display:flex;gap:12px">
+<div style="display:flex;flex-direction:column;gap:6px;flex:1">
+<label style="font-size:12.5px;font-weight:700;color:#5A564C">Places dispo</label>
+<input type="number" min="1" value="{{sellSeats}}" onChange="{{setSellSeats}}" style="border:1px solid #E8DCC0;border-radius:12px;padding:12px 14px;font-family:'Manrope',sans-serif;font-size:14px;background:#FFFFFF;color:#1C1B1F;box-sizing:border-box"/>
+</div>
+<div style="display:flex;flex-direction:column;gap:6px;flex:1">
+<label style="font-size:12.5px;font-weight:700;color:#5A564C">Prix / mois (FCFA)</label>
+<input type="number" min="0" value="{{sellPrice}}" onChange="{{setSellPrice}}" placeholder="1500" style="border:1px solid #E8DCC0;border-radius:12px;padding:12px 14px;font-family:'Manrope',sans-serif;font-size:14px;background:#FFFFFF;color:#1C1B1F;box-sizing:border-box"/>
+</div>
+</div>
+<div style="display:flex;flex-direction:column;gap:6px">
+<label style="font-size:12.5px;font-weight:700;color:#5A564C">Description (optionnel)</label>
+<textarea value="{{sellDesc}}" onChange="{{setSellDesc}}" placeholder="Détails utiles pour l'acheteur..." rows="3" style="border:1px solid #E8DCC0;border-radius:12px;padding:12px 14px;font-family:'Manrope',sans-serif;font-size:14px;background:#FFFFFF;color:#1C1B1F;box-sizing:border-box;resize:none"></textarea>
+</div>
+<button onClick="{{submitSell}}" disabled="{{sellDisabled}}" style="border:none;border-radius:14px;padding:15px;font-family:'Manrope',sans-serif;font-weight:700;font-size:15px;color:#FFFFFF;background:{{sellBtnBg}};cursor:pointer;opacity:{{sellBtnOpacity}}">{{sellSubmitLabel}}</button>
+</sc-if>
+<sc-if value="{{sellSubmitted}}" hint-placeholder-val="{{false}}">
+<div style="display:flex;flex-direction:column;align-items:center;gap:14px;padding:40px 10px;text-align:center">
+<div style="width:64px;height:64px;border-radius:50%;background:#1F8A5D;display:flex;align-items:center;justify-content:center;animation:popIn .3s ease-out">
+<svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+</div>
+<div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:18px">Ton cercle est créé !</div>
+<div style="font-size:13px;color:#8A8578;line-height:1.5">Ta place pour {{lastSellService}} — {{lastSellPlan}} est maintenant visible dans la marketplace.</div>
+<button onClick="{{newListing}}" style="border:1px solid #E8DCC0;border-radius:12px;padding:12px 20px;font-family:'Manrope',sans-serif;font-weight:700;font-size:14px;color:#1C1B1F;background:#FFFFFF;cursor:pointer;width:100%">Publier une autre annonce</button>
+<button onClick="{{goToVentes}}" style="border:none;border-radius:12px;padding:12px 20px;font-family:'Manrope',sans-serif;font-weight:700;font-size:14px;color:#FFFFFF;background:#7F011F;cursor:pointer;width:100%">Voir mes cercles</button>
+</div>
+</sc-if>
+</sc-if>
+</div>
+</sc-if>
+
+<sc-if value="{{isHostView}}" hint-placeholder-val="{{false}}">
+<div style="padding:14px 20px 0;display:flex;align-items:center;justify-content:space-between;flex:none">
+<div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:19px">Tes cercles</div>
+<div onClick="{{toggleHostMode}}" style="display:flex;align-items:center;gap:8px;background:#FFFFFF;border:1px solid #E8DCC0;border-radius:999px;padding:4px">
+<div style="padding:6px 10px;border-radius:999px;font-size:11.5px;font-weight:700;color:#5A564C">Acheteur</div>
+<div style="padding:6px 10px;border-radius:999px;font-size:11.5px;font-weight:700;background:#7F011F;color:#F5EBD0">Host</div>
+</div>
+</div>
+
+<div style="display:flex;gap:10px;padding:14px 20px 0">
+<div style="flex:1;background:#7F011F;border-radius:16px;padding:14px;color:#F5EBD0">
+<div style="font-size:11px;opacity:.8;font-weight:600">Revenu ce mois</div>
+<div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:19px;margin-top:4px">{{hostRevenueDisplay}}</div>
+</div>
+<div style="flex:1;background:#FFFFFF;border:1px solid #E8DCC0;border-radius:16px;padding:14px">
+<div style="font-size:11px;color:#8A8578;font-weight:600">Cercles actifs</div>
+<div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:19px;margin-top:4px">{{hostCirclesCount}}</div>
+</div>
+<div style="flex:1;background:#FFFFFF;border:1px solid #E8DCC0;border-radius:16px;padding:14px">
+<div style="font-size:11px;color:#8A8578;font-weight:600">Membres</div>
+<div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:19px;margin-top:4px">{{hostMembersCount}}</div>
+</div>
+</div>
+
+<div style="margin:14px 20px 0;display:flex;align-items:center;justify-content:space-between;background:#FFFFFF;border:1px solid #E8DCC0;border-radius:16px;padding:14px 16px">
+<div>
+<div style="font-size:11px;color:#8A8578;font-weight:600">Solde disponible</div>
+<div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:19px;margin-top:2px">{{hostBalanceDisplay}}</div>
+</div>
+<div onClick="{{openWithdraw}}" style="padding:11px 16px;border-radius:10px;background:#7F011F;color:#F5EBD0;font-weight:700;font-size:13px;cursor:pointer">Retirer mes gains</div>
+</div>
+
+<sc-if value="{{hasHostAlerts}}" hint-placeholder-val="{{false}}">
+<div style="margin:14px 20px 0;display:flex;flex-direction:column;gap:8px">
+<sc-for list="{{hostAlerts}}" as="al" hint-placeholder-count="1">
+<div style="display:flex;gap:8px;align-items:flex-start;background:#FDF3E3;border:1px solid #F0E2C8;border-radius:12px;padding:10px 12px">
+<svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="flex:none;margin-top:2px"><path d="M12 9v4M12 17h.01" stroke="#B8790A" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="12" r="9" stroke="#B8790A" stroke-width="1.6"/></svg>
+<span style="font-size:12px;color:#8A6A2E;line-height:1.4">{{al.text}}</span>
+</div>
+</sc-for>
+</div>
+</sc-if>
+
+<div style="display:flex;flex-direction:column;gap:10px;padding:16px 20px 16px">
+<sc-if value="{{noSales}}" hint-placeholder-val="{{false}}">
+<div style="display:flex;flex-direction:column;align-items:center;gap:10px;padding:34px 16px;text-align:center;background:#FFFFFF;border:1px solid #E8DCC0;border-radius:16px">
+<div style="font-weight:700;font-size:14px">Aucun cercle pour l'instant</div>
+<div style="font-size:12.5px;color:#8A8578;line-height:1.5">Crée un cercle pour partager un abonnement et recevoir des paiements.</div>
+</div>
+</sc-if>
+<sc-for list="{{soldDisplay}}" as="v" hint-placeholder-count="1">
+<div style="background:#FFFFFF;border:1px solid #E8DCC0;border-radius:16px;padding:14px">
+<div style="display:flex;align-items:center;gap:12px">
+<div style="width:40px;height:40px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:15px;color:#FFFFFF;background:{{v.color}}">{{v.letter}}</div>
+<div style="flex:1;min-width:0">
+<div style="font-weight:700;font-size:14px">{{v.service}} — {{v.plan}}</div>
+<div style="font-size:12px;color:#8A8578;margin-top:2px">{{v.revenueDisplay}} · {{v.seatsLabel}}</div>
+<sc-if value="{{v.isLastSeat}}" hint-placeholder-val="{{false}}">
+<div style="display:inline-block;margin-top:5px;font-size:10.5px;font-weight:700;color:#7F011F;background:#F6E1E4;padding:3px 7px;border-radius:6px">Dernière place !</div>
+</sc-if>
+</div>
+<div onClick="{{v.onEdit}}" style="width:30px;height:30px;border-radius:50%;background:#F5EBD0;display:flex;align-items:center;justify-content:center;cursor:pointer;flex:none">
+<svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4L16.5 3.5z" stroke="#7F011F" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+</div>
+<div onClick="{{v.onDelete}}" style="width:30px;height:30px;border-radius:50%;background:#F6E1E4;display:flex;align-items:center;justify-content:center;cursor:pointer;flex:none">
+<svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13" stroke="#7F011F" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+</div>
+</div>
+<div style="height:6px;border-radius:4px;background:#F0EAD8;margin-top:12px;overflow:hidden">
+<div style="height:100%;background:#7F011F;width:{{v.fillPct}}%"></div>
+</div>
+<div style="display:flex;align-items:center;justify-content:space-between;margin-top:10px">
+<div onClick="{{v.onToggleExpand}}" style="font-size:12px;font-weight:700;color:#7F011F;cursor:pointer">{{v.membersToggleLabel}}</div>
+<div onClick="{{v.onShareInvite}}" style="display:flex;align-items:center;gap:5px;font-size:12px;font-weight:700;color:#7F011F;cursor:pointer">
+<svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M8 12v6a2 2 0 002 2h8a2 2 0 002-2v-6M12 16V4M8 8l4-4 4 4" stroke="#7F011F" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+Partager le cercle
+</div>
+</div>
+<sc-if value="{{v.expanded}}" hint-placeholder-val="{{false}}">
+<div style="margin-top:10px;display:flex;flex-direction:column;gap:6px">
+<sc-for list="{{v.members}}" as="mem" hint-placeholder-count="1">
+<div style="display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:12.5px;color:#5A564C">
+<div style="display:flex;align-items:center;gap:8px">
+<div style="width:6px;height:6px;border-radius:50%;background:{{mem.dotColor}};flex:none"></div>{{mem.name}}
+</div>
+<span style="color:#8A8578;font-size:11.5px">Réabo. {{mem.renewal}}</span>
+</div>
+</sc-for>
+</div>
+</sc-if>
+</div>
+</sc-for>
+</div>
+
+<div style="padding:0 20px 30px">
+<div onClick="{{goSell}}" style="text-align:center;padding:13px;border-radius:12px;background:#F6E1E4;color:#7F011F;font-weight:700;font-size:13.5px;cursor:pointer">+ Créer un nouveau cercle</div>
+</div>
+</sc-if>
+
+<sc-if value="{{withdrawOpen}}" hint-placeholder-val="{{false}}">
+<div style="position:absolute;inset:0;background:#F5EBD0;z-index:250;display:flex;flex-direction:column">
+<div style="padding:58px 20px 10px;display:flex;align-items:center;justify-content:space-between;flex:none">
+<div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:16px">Retirer mes gains</div>
+<div onClick="{{closeWithdraw}}" style="width:34px;height:34px;border-radius:50%;background:#FFFFFF;border:1px solid #E8DCC0;display:flex;align-items:center;justify-content:center;cursor:pointer">
+<svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M5 5l14 14M19 5L5 19" stroke="#1C1B1F" stroke-width="2" stroke-linecap="round"/></svg>
+</div>
+</div>
+<div style="flex:1;overflow:auto;padding:0 20px 20px;display:flex;flex-direction:column;gap:14px">
+<div style="background:#FFFFFF;border:1px solid #E8DCC0;border-radius:16px;padding:16px">
+<div style="font-size:11px;color:#8A8578;font-weight:600">Solde disponible</div>
+<div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:22px;margin-top:2px">{{hostBalanceDisplay}}</div>
+</div>
+<div style="display:flex;flex-direction:column;gap:6px">
+<label style="font-size:12.5px;font-weight:700;color:#5A564C">Montant à retirer (FCFA)</label>
+<input type="number" value="{{withdrawAmount}}" onChange="{{setWithdrawAmount}}" placeholder="5000" style="border:1px solid #E8DCC0;border-radius:12px;padding:12px 14px;font-family:'Manrope',sans-serif;font-size:14px;background:#FFFFFF;box-sizing:border-box"/>
+</div>
+<div style="display:flex;flex-direction:column;gap:10px">
+<label style="font-size:12.5px;font-weight:700;color:#5A564C">Moyen de retrait</label>
+<sc-for list="{{withdrawOperators}}" as="m" hint-placeholder-count="3">
+<div onClick="{{m.onClick}}" style="display:flex;align-items:center;gap:12px;background:{{m.bg}};border:1.5px solid {{m.border}};border-radius:14px;padding:13px 14px;cursor:pointer">
+<div style="width:36px;height:36px;border-radius:10px;background:{{m.color}};color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex:none">{{m.badge}}</div>
+<span style="flex:1;font-weight:700;font-size:14px">{{m.name}}</span>
+<div style="width:18px;height:18px;border-radius:50%;border:2px solid {{m.dotBorder}};display:flex;align-items:center;justify-content:center">
+<sc-if value="{{m.active}}" hint-placeholder-val="{{false}}"><div style="width:9px;height:9px;border-radius:50%;background:#7F011F"></div></sc-if>
+</div>
+</div>
+</sc-for>
+</div>
+<div style="display:flex;flex-direction:column;gap:6px">
+<label style="font-size:12.5px;font-weight:700;color:#5A564C">Numéro Mobile Money</label>
+<input value="{{withdrawPhone}}" onChange="{{setWithdrawPhone}}" placeholder="07 00 00 00 00" style="border:1px solid #E8DCC0;border-radius:12px;padding:12px 14px;font-family:'Manrope',sans-serif;font-size:14px;background:#FFFFFF;box-sizing:border-box"/>
+</div>
+<button onClick="{{submitWithdraw}}" disabled="{{withdrawDisabled}}" style="border:none;border-radius:14px;padding:15px;font-family:'Manrope',sans-serif;font-weight:700;font-size:15px;color:#FFFFFF;background:{{withdrawBtnBg}};cursor:pointer">Confirmer le retrait</button>
+
+<sc-if value="{{hasWithdrawals}}" hint-placeholder-val="{{false}}">
+<div style="font-weight:700;font-size:13px;margin-top:6px">Historique des retraits</div>
+<div style="display:flex;flex-direction:column;gap:8px">
+<sc-for list="{{withdrawalsDisplay}}" as="w" hint-placeholder-count="1">
+<div style="display:flex;align-items:center;justify-content:space-between;background:#FFFFFF;border:1px solid #E8DCC0;border-radius:12px;padding:12px 14px">
+<div>
+<div style="font-size:13px;font-weight:700">{{w.amountDisplay}}</div>
+<div style="font-size:11.5px;color:#8A8578;margin-top:2px">{{w.date}}</div>
+</div>
+<span onClick="{{w.onReceipt}}" style="font-size:11.5px;font-weight:700;color:#7F011F;cursor:pointer">Reçu</span>
+</div>
+</sc-for>
+</div>
+</sc-if>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{editProfileOpen}}" hint-placeholder-val="{{false}}">
+<div style="position:absolute;inset:0;background:#F5EBD0;z-index:250;display:flex;flex-direction:column">
+<div style="padding:58px 20px 10px;display:flex;align-items:center;justify-content:space-between;flex:none">
+<div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:16px">Modifier mon profil</div>
+<div onClick="{{closeEditProfile}}" style="width:34px;height:34px;border-radius:50%;background:#FFFFFF;border:1px solid #E8DCC0;display:flex;align-items:center;justify-content:center;cursor:pointer">
+<svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M5 5l14 14M19 5L5 19" stroke="#1C1B1F" stroke-width="2" stroke-linecap="round"/></svg>
+</div>
+</div>
+<div style="flex:1;overflow:auto;padding:10px 20px 20px;display:flex;flex-direction:column;gap:14px">
+<div style="display:flex;justify-content:center;padding:6px 0">
+<div style="width:72px;height:72px;border-radius:50%;background:#7F011F;color:#fff;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:26px;display:flex;align-items:center;justify-content:center;position:relative">
+{{profileName0}}
+<div style="position:absolute;bottom:-2px;right:-2px;width:26px;height:26px;border-radius:50%;background:#FFFFFF;border:2px solid #F5EBD0;display:flex;align-items:center;justify-content:center">
+<svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M4 7h3l2-3h6l2 3h3v12H4V7z" stroke="#7F011F" stroke-width="1.8" stroke-linejoin="round"/><circle cx="12" cy="13" r="3.2" stroke="#7F011F" stroke-width="1.8"/></svg>
+</div>
+</div>
+</div>
+<div style="display:flex;flex-direction:column;gap:6px">
+<label style="font-size:12.5px;font-weight:700;color:#5A564C">Nom complet</label>
+<input value="{{editProfileName}}" onChange="{{setEditProfileName}}" style="border:1px solid #E8DCC0;border-radius:12px;padding:12px 14px;font-family:'Manrope',sans-serif;font-size:14px;background:#FFFFFF;box-sizing:border-box"/>
+</div>
+<div style="display:flex;flex-direction:column;gap:6px">
+<label style="font-size:12.5px;font-weight:700;color:#5A564C">Téléphone</label>
+<input value="{{editProfilePhone}}" onChange="{{setEditProfilePhone}}" placeholder="07 00 00 00 00" style="border:1px solid #E8DCC0;border-radius:12px;padding:12px 14px;font-family:'Manrope',sans-serif;font-size:14px;background:#FFFFFF;box-sizing:border-box"/>
+</div>
+<button onClick="{{saveProfile}}" style="border:none;border-radius:14px;padding:15px;font-family:'Manrope',sans-serif;font-weight:700;font-size:15px;color:#FFFFFF;background:#7F011F;cursor:pointer">Enregistrer</button>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{isProfile}}" hint-placeholder-val="{{false}}">
+<div style="padding:4px 20px 30px;display:flex;flex-direction:column;gap:18px">
+<div style="display:flex;align-items:center;gap:14px;background:#FFFFFF;border:1px solid #E8DCC0;border-radius:18px;padding:16px">
+<div style="width:52px;height:52px;border-radius:50%;background:#7F011F;color:#fff;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:20px;display:flex;align-items:center;justify-content:center;flex:none">{{profileName0}}</div>
+<div style="flex:1">
+<div style="display:flex;align-items:center;gap:6px">
+<span style="font-weight:700;font-size:15px">{{profileName}}</span>
+<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 2l2.4 1.4 2.7-.4 1.4 2.4 2.4 1.4-.4 2.7 1.4 2.4-1.4 2.4.4 2.7-2.4 1.4-1.4 2.4-2.7-.4L12 22l-2.4-1.4-2.7.4-1.4-2.4-2.4-1.4.4-2.7L2 12l1.4-2.4-.4-2.7 2.4-1.4 1.4-2.4 2.7.4L12 2z" fill="#1F8A5D"/><path d="M8.5 12.2l2.2 2.2 4.5-4.7" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+</div>
+<div style="font-size:12.5px;color:#8A8578;margin-top:3px">★ 4.8 · 12 transactions</div>
+</div>
+<div onClick="{{openEditProfile}}" style="width:34px;height:34px;border-radius:50%;background:#F5EBD0;display:flex;align-items:center;justify-content:center;cursor:pointer;flex:none">
+<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4L16.5 3.5z" stroke="#7F011F" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+</div>
+<div style="display:flex;gap:8px">
+<sc-for list="{{profileTabs}}" as="pt" hint-placeholder-count="3">
+<div onClick="{{pt.onClick}}" style="flex:1;text-align:center;padding:10px;border-radius:12px;font-size:13px;font-weight:700;cursor:pointer;background:{{pt.bg}};color:{{pt.fg}}">{{pt.label}}</div>
+</sc-for>
+</div>
+
+<sc-if value="{{showAchats}}" hint-placeholder-val="{{true}}">
+<sc-if value="{{noActive}}" hint-placeholder-val="{{false}}">
+<div style="display:flex;flex-direction:column;align-items:center;gap:10px;padding:34px 16px;text-align:center;background:#FFFFFF;border:1px solid #E8DCC0;border-radius:16px">
+<div style="font-weight:700;font-size:14px">Aucun abonnement actif</div>
+<div style="font-size:12.5px;color:#8A8578;line-height:1.5">Tu n'as encore acheté aucune place. Trouve un abonnement dans la marketplace.</div>
+<div onClick="{{goBrowseFromProfile}}" style="margin-top:4px;padding:10px 18px;border-radius:10px;background:#7F011F;color:#F5EBD0;font-weight:700;font-size:13px;cursor:pointer">Trouver un abonnement</div>
+</div>
+</sc-if>
+<div style="display:flex;flex-direction:column;gap:10px">
+<sc-for list="{{purchasedDisplay}}" as="p" hint-placeholder-count="1">
+<div onClick="{{p.onClick}}" style="display:flex;align-items:center;gap:12px;background:#FFFFFF;border:1px solid #E8DCC0;border-radius:16px;padding:14px;cursor:pointer">
+<div style="width:40px;height:40px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:15px;color:#FFFFFF;background:{{p.color}}">{{p.letter}}</div>
+<div style="flex:1">
+<div style="font-weight:700;font-size:14px">{{p.service}} — {{p.plan}}</div>
+<div style="font-size:12px;color:#8A8578;margin-top:2px">{{p.priceDisplay}} · jusqu'au {{p.until}}</div>
+</div>
+<div style="font-size:11px;font-weight:700;color:#1F8A5D;background:#F1F7F3;padding:4px 8px;border-radius:6px">{{p.status}}</div>
+</div>
+</sc-for>
+</div>
+</sc-if>
+<sc-if value="{{showVentes}}" hint-placeholder-val="{{false}}">
+<div style="display:flex;flex-direction:column;gap:10px">
+<sc-for list="{{soldDisplay}}" as="v" hint-placeholder-count="1">
+<div style="display:flex;align-items:center;gap:12px;background:#FFFFFF;border:1px solid #E8DCC0;border-radius:16px;padding:14px">
+<div style="width:40px;height:40px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:15px;color:#FFFFFF;background:{{v.color}}">{{v.letter}}</div>
+<div style="flex:1">
+<div style="font-weight:700;font-size:14px">{{v.service}} — {{v.plan}}</div>
+<div style="font-size:12px;color:#8A8578;margin-top:2px">{{v.priceDisplay}} · {{v.ventesLabel}}</div>
+</div>
+<div style="font-size:11px;font-weight:700;color:#B8790A;background:#FDF3E3;padding:4px 8px;border-radius:6px;flex:none">{{v.status}}</div>
+<div onClick="{{v.onEdit}}" style="width:30px;height:30px;border-radius:50%;background:#F5EBD0;display:flex;align-items:center;justify-content:center;cursor:pointer;flex:none">
+<svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4L16.5 3.5z" stroke="#7F011F" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+</div>
+<div onClick="{{v.onDelete}}" style="width:30px;height:30px;border-radius:50%;background:#F6E1E4;display:flex;align-items:center;justify-content:center;cursor:pointer;flex:none">
+<svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13" stroke="#7F011F" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+</div>
+</div>
+</sc-for>
+<sc-if value="{{noSales}}" hint-placeholder-val="{{false}}">
+<div style="text-align:center;color:#8A8578;font-size:13px;padding:30px 0">Tu n'as encore publié aucune annonce.</div>
+</sc-if>
+</div>
+</sc-if>
+
+<sc-if value="{{showHistorique}}" hint-placeholder-val="{{false}}">
+<div style="display:flex;flex-direction:column;gap:10px">
+<sc-for list="{{historyDisplay}}" as="h" hint-placeholder-count="2">
+<div style="display:flex;align-items:center;gap:12px;background:#FFFFFF;border:1px solid #E8DCC0;border-radius:16px;padding:14px">
+<div style="width:36px;height:36px;border-radius:10px;flex:none;display:flex;align-items:center;justify-content:center;background:{{h.iconBg}}">
+<svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="{{h.iconPath}}" stroke="{{h.iconColor}}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+</div>
+<div style="flex:1">
+<div style="font-weight:700;font-size:13.5px">{{h.label}}</div>
+<div style="font-size:11.5px;color:#8A8578;margin-top:2px">{{h.date}}</div>
+</div>
+<div style="font-weight:700;font-size:13.5px;color:{{h.amountColor}}">{{h.amountLabel}}</div>
+</div>
+</sc-for>
+</div>
+</sc-if>
+</div>
+</sc-if>
+
+</div>
+
+</div>
+
+<div style="position:absolute;left:16px;right:16px;bottom:24px;z-index:60;display:flex;align-items:center;justify-content:space-around;padding:10px 18px;border-radius:24px;background:rgba(245,235,208,0.55);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.5);box-shadow:0 8px 24px rgba(127,1,31,0.18)">
+<div onClick="{{goMarket}}" style="display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M4 11l8-7 8 7v8a1 1 0 01-1 1h-4v-6h-6v6H5a1 1 0 01-1-1v-8z" stroke="{{marketColor}}" stroke-width="1.8" stroke-linejoin="round"/></svg>
+<span style="font-size:10.5px;font-weight:700;color:{{marketColor}}">Accueil</span>
+</div>
+<div onClick="{{goSell}}" style="width:52px;height:52px;border-radius:50%;background:#7F011F;box-shadow:0 6px 16px rgba(127,1,31,0.4);display:flex;align-items:center;justify-content:center;cursor:pointer;margin-top:-26px;border:3px solid rgba(245,235,208,0.7)">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="#F5EBD0" stroke-width="2.2" stroke-linecap="round"/></svg>
+</div>
+<div onClick="{{goVentes}}" style="display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="8" cy="8" r="3" stroke="{{ventesColor}}" stroke-width="1.8"/><circle cx="16" cy="9" r="2.4" stroke="{{ventesColor}}" stroke-width="1.8"/><path d="M3 19c.7-3 3-5 5-5s4.3 2 5 5" stroke="{{ventesColor}}" stroke-width="1.8" stroke-linecap="round"/><path d="M13.5 15c1.6.2 3 1.8 3.5 4" stroke="{{ventesColor}}" stroke-width="1.8" stroke-linecap="round"/></svg>
+<span style="font-size:10.5px;font-weight:700;color:{{ventesColor}}">Mes cercles</span>
+</div>
+</div>
+
+<sc-if value="{{selectedPurchased}}" hint-placeholder-val="{{false}}">
+<div style="position:absolute;inset:0;background:#F5EBD0;z-index:100;display:flex;flex-direction:column">
+<div style="flex:1;overflow:auto;display:flex;flex-direction:column">
+<div style="padding:58px 20px 6px;display:flex;align-items:center;gap:12px;flex:none">
+<div onClick="{{closePurchasedDetail}}" style="width:38px;height:38px;border-radius:50%;background:#FFFFFF;border:1px solid #E8DCC0;display:flex;align-items:center;justify-content:center;cursor:pointer;flex:none">
+<svg width="9" height="15" viewBox="0 0 9 15" fill="none"><path d="M8 1L1 7.5 8 14" stroke="#1C1B1F" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+</div>
+<div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:15px">Mon abonnement</div>
+</div>
+<div style="margin:8px 20px 0;padding:26px 20px;border-radius:20px;background:{{selectedPurchased.color}};color:#fff;flex:none">
+<div style="width:52px;height:52px;border-radius:15px;background:rgba(255,255,255,0.18);display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:20px;margin-bottom:12px">{{selectedPurchased.letter}}</div>
+<div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:21px">{{selectedPurchased.service}}</div>
+<div style="font-size:13px;opacity:.85;margin-top:2px">{{selectedPurchased.plan}}</div>
+</div>
+<div style="padding:16px 20px 0;display:flex;align-items:center;justify-content:space-between">
+<span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:22px">{{selectedPurchased.priceDisplay}}</span>
+<span style="font-size:12px;font-weight:700;padding:5px 10px;border-radius:8px;background:#F1F7F3;color:#1F8A5D">{{selectedPurchased.status}}</span>
+</div>
+<div style="margin:16px 20px 0;padding:16px;background:#FFFFFF;border:1px solid #E8DCC0;border-radius:16px;display:flex;flex-direction:column;gap:10px">
+<div style="display:flex;justify-content:space-between;font-size:13.5px"><span style="color:#8A8578">Renouvellement</span><span style="font-weight:700">{{selectedPurchased.until}}</span></div>
+<div style="display:flex;justify-content:space-between;font-size:13.5px"><span style="color:#8A8578">Statut</span><span style="font-weight:700">{{selectedPurchased.status}}</span></div>
+</div>
+<div onClick="{{downloadReceipt}}" style="display:flex;align-items:center;justify-content:center;gap:7px;margin:10px 20px 0;padding:12px;border-radius:12px;background:#FFFFFF;border:1px solid #E8DCC0;color:#1C1B1F;font-weight:700;font-size:13px;cursor:pointer">
+<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 3v12M7 11l5 5 5-5M5 21h14" stroke="#7F011F" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+Télécharger le reçu
+</div>
+
+<sc-if value="{{selectedPurchased.isCredentials}}" hint-placeholder-val="{{false}}">
+<div style="margin:16px 20px 0;padding:16px;background:#FFFFFF;border:1px solid #E8DCC0;border-radius:16px;display:flex;flex-direction:column;gap:12px">
+<div style="font-weight:700;font-size:13px">Tes identifiants d'accès</div>
+<div>
+<div style="font-size:11px;color:#8A8578;font-weight:700;margin-bottom:4px">EMAIL</div>
+<div style="display:flex;align-items:center;justify-content:space-between;gap:8px;background:#F5EBD0;border-radius:10px;padding:10px 12px">
+<span style="font-size:13px;word-break:break-all">{{selectedPurchased.accessEmail}}</span>
+<span onClick="{{copyEmail}}" style="font-size:11.5px;font-weight:700;color:#7F011F;cursor:pointer;flex:none">Copier</span>
+</div>
+</div>
+<div>
+<div style="font-size:11px;color:#8A8578;font-weight:700;margin-bottom:4px">MOT DE PASSE</div>
+<div style="display:flex;align-items:center;justify-content:space-between;gap:8px;background:#F5EBD0;border-radius:10px;padding:10px 12px">
+<span style="font-size:13px">{{selectedPurchased.accessPassword}}</span>
+<span onClick="{{copyPassword}}" style="font-size:11.5px;font-weight:700;color:#7F011F;cursor:pointer;flex:none">Copier</span>
+</div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{selectedPurchased.isLink}}" hint-placeholder-val="{{false}}">
+<div style="margin:16px 20px 0;padding:16px;background:#FFFFFF;border:1px solid #E8DCC0;border-radius:16px;display:flex;flex-direction:column;gap:10px">
+<div style="font-weight:700;font-size:13px">Lien d'invitation</div>
+<div style="display:flex;align-items:center;justify-content:space-between;gap:8px;background:#F5EBD0;border-radius:10px;padding:10px 12px">
+<span style="font-size:12.5px;word-break:break-all;color:#7F011F">{{selectedPurchased.accessLink}}</span>
+</div>
+<span onClick="{{copyLink}}" style="text-align:center;padding:12px;border-radius:10px;background:#7F011F;color:#F5EBD0;font-weight:700;font-size:13px;cursor:pointer">Copier le lien</span>
+</div>
+</sc-if>
+
+<div style="margin:16px 20px 0;padding:16px;background:#FFFFFF;border:1px solid #E8DCC0;border-radius:16px;display:flex;flex-direction:column;gap:10px">
+<sc-if value="{{selectedPurchased.hasRated}}" hint-placeholder-val="{{false}}">
+<div style="font-weight:700;font-size:13px">Ton avis</div>
+<div style="font-size:16px;color:#B8790A">{{selectedPurchased.ratedStarsLabel}}</div>
+</sc-if>
+<sc-if value="{{selectedPurchased.notRated}}" hint-placeholder-val="{{true}}">
+<div style="font-weight:700;font-size:13px">Noter le vendeur</div>
+<div style="display:flex;gap:6px">
+<sc-for list="{{ratingStarsDisplay}}" as="rs" hint-placeholder-count="5">
+<span onClick="{{rs.onClick}}" style="font-size:24px;cursor:pointer;color:{{rs.filled}}">★</span>
+</sc-for>
+</div>
+<textarea value="{{ratingComment}}" onChange="{{setRatingComment}}" placeholder="Un commentaire (optionnel)..." rows="2" style="border:1px solid #E8DCC0;border-radius:10px;padding:10px 12px;font-family:'Manrope',sans-serif;font-size:13px;background:#F5EBD0;box-sizing:border-box;resize:none"></textarea>
+<span onClick="{{submitRating}}" style="text-align:center;padding:11px;border-radius:10px;background:#7F011F;color:#F5EBD0;font-weight:700;font-size:13px;cursor:pointer">Envoyer l'avis</span>
+</sc-if>
+</div>
+</div>
+<div style="flex:none;padding:14px 20px 28px;background:#F5EBD0;border-top:1px solid #E8DCC0;display:flex;flex-direction:column;gap:10px">
+<button onClick="{{contactSeller}}" style="width:100%;border:1px solid #E8DCC0;border-radius:14px;padding:14px;font-family:'Manrope',sans-serif;font-weight:700;font-size:14px;color:#1C1B1F;background:#FFFFFF;cursor:pointer">Contacter le vendeur</button>
+<button onClick="{{cancelSubscription}}" style="width:100%;border:none;border-radius:14px;padding:14px;font-family:'Manrope',sans-serif;font-weight:700;font-size:14px;color:#7F011F;background:#F6E1E4;cursor:pointer">Annuler l'abonnement</button>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{selected}}" hint-placeholder-val="{{false}}">
+<div style="position:absolute;inset:0;background:#F5EBD0;z-index:100;display:flex;flex-direction:column">
+<div style="flex:1;overflow:auto;display:flex;flex-direction:column">
+<div style="padding:58px 20px 6px;display:flex;align-items:center;gap:12px;flex:none">
+<div onClick="{{closeDetail}}" style="width:38px;height:38px;border-radius:50%;background:#FFFFFF;border:1px solid #E8DCC0;display:flex;align-items:center;justify-content:center;cursor:pointer;flex:none">
+<svg width="9" height="15" viewBox="0 0 9 15" fill="none"><path d="M8 1L1 7.5 8 14" stroke="#1C1B1F" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+</div>
+<div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:15px">Détail de l'offre</div>
+</div>
+<div style="margin:8px 20px 0;padding:26px 20px;border-radius:20px;background:{{selected.color}};color:#fff;flex:none">
+<div style="width:52px;height:52px;border-radius:15px;background:rgba(255,255,255,0.18);display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:20px;margin-bottom:12px">{{selected.letter}}</div>
+<div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:21px">{{selected.service}}</div>
+<div style="font-size:13px;opacity:.85;margin-top:2px">{{selected.plan}}</div>
+</div>
+<div style="padding:16px 20px 0;display:flex;align-items:center;justify-content:space-between">
+<span style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:22px">{{selected.priceDisplay}}</span>
+<span style="font-size:12px;font-weight:700;padding:5px 10px;border-radius:8px;background:{{selected.seatsBg}};color:{{selected.seatsFg}}">{{selected.seatsLabel}}</span>
+</div>
+<div style="padding:14px 20px 0;font-size:13.5px;line-height:1.6;color:#5A564C">{{selected.desc}}</div>
+<div style="margin:16px 20px 0;padding:14px 16px;background:#FFFFFF;border:1px solid #E8DCC0;border-radius:16px;display:flex;align-items:center;gap:12px">
+<div style="width:38px;height:38px;border-radius:50%;background:#EFE3C4;display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;flex:none">{{selected.sellerInitial}}</div>
+<div style="flex:1">
+<div style="display:flex;align-items:center;gap:5px">
+<span style="font-weight:700;font-size:13.5px">{{selected.seller}}</span>
+<sc-if value="{{selected.verified}}" hint-placeholder-val="{{false}}">
+<svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M12 2l2.4 1.4 2.7-.4 1.4 2.4 2.4 1.4-.4 2.7 1.4 2.4-1.4 2.4.4 2.7-2.4 1.4-1.4 2.4-2.7-.4L12 22l-2.4-1.4-2.7.4-1.4-2.4-2.4-1.4.4-2.7L2 12l1.4-2.4-.4-2.7 2.4-1.4 1.4-2.4 2.7.4L12 2z" fill="#1F8A5D"/><path d="M8.5 12.2l2.2 2.2 4.5-4.7" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+</sc-if>
+</div>
+<div style="font-size:12px;color:#8A8578;margin-top:2px">★ {{selected.ratingLabel}} · vendeur</div>
+<sc-if value="{{selected.verified}}" hint-placeholder-val="{{false}}">
+<div style="font-size:11px;color:#1F8A5D;margin-top:3px">Identité vérifiée par pièce d'identité</div>
+</sc-if>
+<sc-if value="{{selected.notVerified}}" hint-placeholder-val="{{false}}">
+<div style="font-size:11px;color:#B8790A;margin-top:3px">Identité non vérifiée — achète avec prudence</div>
+</sc-if>
+</div>
+</div>
+
+<sc-if value="{{selected.hasReviews}}" hint-placeholder-val="{{false}}">
+<div style="margin:0 20px;padding:14px 16px;background:#FFFFFF;border:1px solid #E8DCC0;border-radius:16px;display:flex;flex-direction:column;gap:12px">
+<div style="font-weight:700;font-size:13px">Avis des acheteurs</div>
+<sc-for list="{{selected.reviews}}" as="rv" hint-placeholder-count="2">
+<div>
+<div style="display:flex;justify-content:space-between;font-size:12.5px"><span style="font-weight:700">{{rv.author}}</span><span style="color:#B8790A">{{rv.starsLabel}}</span></div>
+<div style="font-size:12px;color:#5A564C;margin-top:3px;line-height:1.5">{{rv.text}}</div>
+</div>
+</sc-for>
+</div>
+</sc-if>
+
+<div style="margin:14px 20px 20px;padding:13px 16px;background:#FDF6EE;border:1px solid #F0E2C8;border-radius:14px;display:flex;gap:10px;align-items:flex-start">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="flex:none;margin-top:1px"><path d="M12 2l8 4v6c0 5-3.4 8.7-8 10-4.6-1.3-8-5-8-10V6l8-4z" stroke="#B8790A" stroke-width="1.6" stroke-linejoin="round"/></svg>
+<span style="font-size:12.5px;color:#8A6A2E;line-height:1.5">Garantie remboursement 48h si l'accès promis ne fonctionne pas.</span>
+</div>
+</div>
+<div style="flex:none;padding:14px 20px 28px;background:#F5EBD0;border-top:1px solid #E8DCC0">
+<button onClick="{{startCheckout}}" style="width:100%;border:none;border-radius:14px;padding:15px;font-family:'Manrope',sans-serif;font-weight:700;font-size:15px;color:#FFFFFF;background:#7F011F;cursor:pointer">Acheter cette place · {{selected.priceDisplay}}</button>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{checkoutOpen}}" hint-placeholder-val="{{false}}">
+<div style="position:absolute;inset:0;background:#F5EBD0;z-index:200;display:flex;flex-direction:column">
+<div style="padding:58px 20px 10px;display:flex;align-items:center;justify-content:space-between;flex:none">
+<div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:16px">Paiement</div>
+<div onClick="{{closeCheckout}}" style="width:34px;height:34px;border-radius:50%;background:#FFFFFF;border:1px solid #E8DCC0;display:flex;align-items:center;justify-content:center;cursor:pointer">
+<svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M5 5l14 14M19 5L5 19" stroke="#1C1B1F" stroke-width="2" stroke-linecap="round"/></svg>
+</div>
+</div>
+<div style="display:flex;gap:6px;padding:0 20px 14px;flex:none">
+<div style="flex:1;height:4px;border-radius:4px;background:{{dot1}}"></div>
+<div style="flex:1;height:4px;border-radius:4px;background:{{dot2}}"></div>
+<div style="flex:1;height:4px;border-radius:4px;background:{{dot3}}"></div>
+</div>
+<div style="flex:1;overflow:auto;padding:0 20px 20px">
+
+<sc-if value="{{step1}}" hint-placeholder-val="{{true}}">
+<div style="display:flex;flex-direction:column;gap:14px">
+<div style="font-weight:700;font-size:15px">Récapitulatif</div>
+<div style="background:#FFFFFF;border:1px solid #E8DCC0;border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:10px">
+<div style="display:flex;justify-content:space-between;font-size:13.5px"><span style="color:#8A8578">Abonnement</span><span style="font-weight:700">{{selected.service}}</span></div>
+<div style="display:flex;justify-content:space-between;font-size:13.5px"><span style="color:#8A8578">Formule</span><span style="font-weight:700">{{selected.plan}}</span></div>
+<div style="display:flex;justify-content:space-between;font-size:13.5px"><span style="color:#8A8578">Vendeur</span><span style="font-weight:700">{{selected.seller}}</span></div>
+<div style="height:1px;background:#E8DCC0"></div>
+<div style="display:flex;justify-content:space-between;font-size:16px"><span style="font-weight:700">Total / mois</span><span style="font-family:'Space Grotesk',sans-serif;font-weight:700">{{selected.priceDisplay}}</span></div>
+</div>
+<button onClick="{{goStep2}}" style="border:none;border-radius:14px;padding:15px;font-family:'Manrope',sans-serif;font-weight:700;font-size:15px;color:#FFFFFF;background:#7F011F;cursor:pointer">Continuer</button>
+</div>
+</sc-if>
+
+<sc-if value="{{step2}}" hint-placeholder-val="{{false}}">
+<div style="display:flex;flex-direction:column;gap:14px">
+<div style="font-weight:700;font-size:15px">Choisis ton moyen de paiement</div>
+<div style="display:flex;flex-direction:column;gap:10px">
+<sc-for list="{{paymentMethods}}" as="m" hint-placeholder-count="3">
+<div onClick="{{m.onClick}}" style="display:flex;align-items:center;gap:12px;background:{{m.bg}};border:1.5px solid {{m.border}};border-radius:14px;padding:13px 14px;cursor:pointer">
+<div style="width:36px;height:36px;border-radius:10px;background:{{m.color}};color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex:none">{{m.badge}}</div>
+<span style="flex:1;font-weight:700;font-size:14px">{{m.name}}</span>
+<div style="width:18px;height:18px;border-radius:50%;border:2px solid {{m.dotBorder}};display:flex;align-items:center;justify-content:center">
+<sc-if value="{{m.active}}" hint-placeholder-val="{{false}}"><div style="width:9px;height:9px;border-radius:50%;background:#7F011F"></div></sc-if>
+</div>
+</div>
+</sc-for>
+</div>
+<div style="display:flex;flex-direction:column;gap:6px;margin-top:4px">
+<label style="font-size:12.5px;font-weight:700;color:#5A564C">Numéro Mobile Money</label>
+<input value="{{phoneNumber}}" onChange="{{setPhoneNumber}}" placeholder="07 00 00 00 00" style="border:1px solid #E8DCC0;border-radius:12px;padding:12px 14px;font-family:'Manrope',sans-serif;font-size:14px;background:#FFFFFF;box-sizing:border-box"/>
+</div>
+<button onClick="{{confirmPayment}}" disabled="{{payDisabled}}" style="border:none;border-radius:14px;padding:15px;font-family:'Manrope',sans-serif;font-weight:700;font-size:15px;color:#FFFFFF;background:{{payBtnBg}};cursor:pointer;opacity:{{payBtnOpacity}}">Payer {{selected.priceDisplay}}</button>
+</div>
+</sc-if>
+
+<sc-if value="{{step3}}" hint-placeholder-val="{{false}}">
+<div style="display:flex;flex-direction:column;align-items:center;gap:14px;padding:30px 10px;text-align:center">
+<div style="width:64px;height:64px;border-radius:50%;background:#1F8A5D;display:flex;align-items:center;justify-content:center;animation:popIn .3s ease-out">
+<svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+</div>
+<div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:18px">Paiement réussi !</div>
+<div style="font-size:13px;color:#8A8578;line-height:1.5">Ta place pour {{selected.service}} — {{selected.plan}} est activée. Retrouve-la dans ton profil.</div>
+<button onClick="{{finishCheckout}}" style="border:none;border-radius:12px;padding:13px 20px;font-family:'Manrope',sans-serif;font-weight:700;font-size:14px;color:#FFFFFF;background:#7F011F;cursor:pointer;width:100%">Voir mon abonnement</button>
+</div>
+</sc-if>
+
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{toast}}" hint-placeholder-val="{{false}}">
+<div style="position:absolute;left:50%;bottom:110px;transform:translateX(-50%);background:#1C1B1F;color:#fff;padding:12px 18px;border-radius:12px;font-size:13px;font-weight:700;z-index:400;animation:toastIn .25s ease-out;white-space:nowrap">{{toast}}</div>
+</sc-if>
+
+</div>
+</x-import>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = {
+    tab: 'market',
+    filter: 'Tous',
+    searchQuery: '',
+    selectedId: null,
+    checkoutOpen: false,
+    checkoutStep: 1,
+    paymentMethod: 'orange',
+    phoneNumber: '',
+    sellService: 'Netflix',
+    sellPlan: '',
+    sellSeats: 1,
+    sellPrice: '',
+    sellDesc: '',
+    sellAccessLink: '',
+    sellAccessEmail: '',
+    sellAccessPassword: '',
+    sellSubmitted: false,
+    lastSellService: '',
+    lastSellPlan: '',
+    profileTab: 'achats',
+    purchased: [
+      { id: 'p1', service: 'Disney+', plan: 'Standard', price: 2000, color: '#113CCF', status: 'Actif', until: '12 août 2026', accessType: 'credentials', accessEmail: 'famille.diallo.disney@gmail.com', accessPassword: 'DisneyMagic7!', sellerRating: null }
+    ],
+    sold: [
+      { id: 's1', service: 'Spotify', plan: 'Duo', price: 1500, color: '#1DB954', ventes: 1, status: 'Active', seats: 1, members: [{ name: 'Fatou N.', renewal: '18 août 2026', paymentStatus: 'ok' }] },
+      { id: 's2', service: 'Netflix', plan: 'Premium · 4 écrans', price: 3500, color: '#E50914', ventes: 2, status: 'Active', seats: 4, members: [{ name: 'Yao K.', renewal: '5 août 2026', paymentStatus: 'failed' }, { name: 'Aminata S.', renewal: '21 août 2026', paymentStatus: 'ok' }] },
+    ],
+    hostExpandedId: null,
+    hostBalance: 8500,
+    withdrawals: [],
+    withdrawOpen: false,
+    withdrawAmount: '',
+    withdrawOperator: 'orange',
+    withdrawPhone: '',
+    profileName: 'Awa Koné',
+    profilePhone: '',
+    editProfileOpen: false,
+    editProfileName: '',
+    editProfilePhone: '',
+    seatAdjustments: {},
+    authed: false,
+    authScreen: 'login',
+    loginId: '',
+    loginPassword: '',
+    signupName: '',
+    signupId: '',
+    signupPassword: '',
+    notifOpen: false,
+    sortBy: 'default',
+    sellEditingId: null,
+    kycStatus: 'verified',
+    kycName: '',
+    kycIdNumber: '',
+    kycPhone: '',
+    kycDocUploaded: false,
+    hostMode: false,
+    ratingStars: 0,
+    ratingComment: '',
+    toast: null,
+  };
+
+  listings = [
+    { id: 'l1', service: 'Netflix', plan: 'Premium · 4 écrans', price: 3500, seatsLeft: 1, totalSeats: 4, seller: 'Aïcha K.', verified: true, rating: 4.9, sales: 58, color: '#E50914', accessType: 'credentials', accessEmail: 'famille.koffi.stream@gmail.com', accessPassword: 'Netflix2026!', desc: "Compte partagé Netflix Premium, 4K Ultra HD, 4 écrans simultanés. Profil individuel sécurisé par code PIN.", reviews: [{ author: 'Yasmine B.', stars: 5, text: "Accès instantané, aucun souci depuis 3 mois." }, { author: 'Karim O.', stars: 5, text: "Vendeuse très réactive, je recommande." }] },
+    { id: 'l2', service: 'Spotify', plan: 'Duo', price: 1500, seatsLeft: 1, totalSeats: 2, seller: 'Moussa T.', verified: true, rating: 4.7, sales: 21, color: '#1DB954', accessType: 'link', accessLink: 'https://www.spotify.com/family/invite/9K2xQ7', desc: "Abonnement Spotify Duo, 2 comptes premium séparés, sans publicité, qualité audio élevée.", reviews: [{ author: 'Léa M.', stars: 5, text: "Configuration simple, ça marche parfaitement." }, { author: 'Souleymane K.', stars: 4, text: "Bon plan, léger délai à l'activation." }] },
+    { id: 'l3', service: 'Canal+', plan: 'Ciné Séries', price: 4000, seatsLeft: 1, totalSeats: 1, seller: 'Fatou D.', verified: false, rating: 4.2, sales: 6, color: '#151515', accessType: 'credentials', accessEmail: 'partage.canal.plus@gmail.com', accessPassword: 'CanalCine24#', desc: "Accès Canal+ Ciné Séries, films et séries en illimité, streaming HD.", reviews: [{ author: 'Bakary S.', stars: 4, text: "Ça fonctionne bien, communication un peu lente." }] },
+    { id: 'l4', service: 'YouTube', plan: 'Premium Famille', price: 1200, seatsLeft: 3, totalSeats: 6, seller: 'Ibrahim S.', verified: true, rating: 5.0, sales: 102, color: '#CC0000', accessType: 'link', accessLink: 'https://families.google.com/join/9F3KDE', desc: "YouTube Premium sans pub + YouTube Music inclus, jusqu'à 6 membres du foyer.", reviews: [{ author: 'Aminata C.', stars: 5, text: "Meilleur vendeur, place activée en 5 minutes." }, { author: 'Josué N.', stars: 5, text: "Toujours fiable, 3ème place que je lui achète." }] },
+    { id: 'l5', service: 'Disney+', plan: 'Standard', price: 2000, seatsLeft: 2, totalSeats: 4, seller: 'Nadège A.', verified: true, rating: 4.8, sales: 44, color: '#113CCF', accessType: 'credentials', accessEmail: 'famille.diallo.disney@gmail.com', accessPassword: 'DisneyMagic7!', desc: "Disney, Marvel, Pixar, Star Wars. 4 écrans en simultané, profils séparés.", reviews: [{ author: 'Prisca T.', stars: 5, text: "Très pro, réponse rapide à mes questions." }] },
+    { id: 'l6', service: 'Apple TV+', plan: 'Famille', price: 1000, seatsLeft: 1, totalSeats: 6, seller: 'Kader B.', verified: true, rating: 4.6, sales: 15, color: '#1A1A1A', accessType: 'link', accessLink: 'https://appleid.apple.com/family/invite/7QX2M', desc: "Apple TV+ en partage familial, contenus originaux Apple, jusqu'à 6 comptes.", reviews: [{ author: 'Estelle G.', stars: 4, text: "Bonne expérience globale, RAS." }] },
+  ];
+
+  toastTimer = null;
+  showToast(msg) {
+    clearTimeout(this.toastTimer);
+    this.setState({ toast: msg });
+    this.toastTimer = setTimeout(() => this.setState({ toast: null }), 2600);
+  }
+
+  renderVals() {
+    const s = this.state;
+    const fmt = (n) => n.toLocaleString('fr-FR') + ' FCFA';
+
+    const enrich = (l) => ({
+      ...l,
+      priceDisplay: fmt(l.price) + '/mois',
+      seatsLabel: l.seatsLeft === 1 ? '1 place restante' : l.seatsLeft + ' places restantes',
+      seatsBg: l.seatsLeft <= 1 ? '#F6E1E4' : '#F1F7F3',
+      seatsFg: l.seatsLeft <= 1 ? '#7F011F' : '#1F8A5D',
+      ratingLabel: l.rating.toFixed(1) + ' (' + l.sales + ')',
+      letter: l.service[0],
+      sellerInitial: l.seller[0],
+      notVerified: !l.verified,
+      hasReviews: !!(l.reviews && l.reviews.length),
+      reviews: (l.reviews || []).map(rv => ({ ...rv, starsLabel: '★'.repeat(rv.stars) })),
+      onClick: () => this.setState({ selectedId: l.id }),
+    });
+
+    const allListings = this.listings
+      .map(l => ({ ...l, seatsLeft: l.seatsLeft - (s.seatAdjustments[l.id] || 0) }))
+      .filter(l => l.seatsLeft > 0)
+      .map(enrich);
+    const q = s.searchQuery.trim().toLowerCase();
+    const byFilter = s.filter === 'Tous' ? allListings : allListings.filter(l => l.service === s.filter);
+    let listings = q ? byFilter.filter(l => (l.service + ' ' + l.plan).toLowerCase().includes(q)) : byFilter;
+    if (s.sortBy === 'priceAsc') listings = [...listings].sort((a, b) => a.price - b.price);
+    if (s.sortBy === 'seats') listings = [...listings].sort((a, b) => b.seatsLeft - a.seatsLeft);
+
+    const filterNames = ['Tous', 'Netflix', 'Spotify', 'Canal+', 'YouTube', 'Disney+', 'Apple TV+'];
+    const filters = filterNames.map(name => ({
+      name,
+      bg: name === s.filter ? '#7F011F' : '#FFFFFF',
+      fg: name === s.filter ? '#FFFFFF' : '#1C1B1F',
+      border: name === s.filter ? '#7F011F' : '#E8DCC0',
+      onClick: () => this.setState({ filter: name }),
+    }));
+
+    const selected = s.selectedId ? enrich(this.listings.find(l => l.id === s.selectedId)) : null;
+
+    const linkServices = ['Spotify', 'YouTube Premium', 'Apple TV+'];
+    const sellIsLink = linkServices.includes(s.sellService);
+    const sellIsCredentials = !sellIsLink;
+    const sellAccessValid = sellIsLink ? s.sellAccessLink.trim().length > 3 : (s.sellAccessEmail.trim().length > 3 && s.sellAccessPassword.trim().length > 0);
+    const kycPhoneDigits = s.kycPhone.replace(/\D/g, '');
+    const kycValid = s.kycName.trim().length > 1 && kycPhoneDigits.length >= 8 && s.kycDocUploaded;
+
+    const sellValid = s.sellPlan.trim().length > 0 && Number(s.sellPrice) > 0 && Number(s.sellSeats) > 0 && sellAccessValid;
+    const phoneValid = s.phoneNumber.replace(/\D/g, '').length >= 8;
+
+    const profileTabDefs = [{ id: 'achats', label: 'Mes achats' }, { id: 'ventes', label: 'Mes ventes' }, { id: 'historique', label: 'Historique' }];
+    const profileTabs = profileTabDefs.map(t => ({
+      ...t,
+      bg: t.id === s.profileTab ? '#7F011F' : '#FFFFFF',
+      fg: t.id === s.profileTab ? '#FFFFFF' : '#1C1B1F',
+      onClick: () => this.setState({ profileTab: t.id }),
+    }));
+
+    const paymentDefs = [
+      { id: 'orange', name: 'Orange Money', badge: 'OM', color: '#FF6600' },
+      { id: 'mtn', name: 'MTN MoMo', badge: 'MTN', color: '#FFCC00' },
+      { id: 'moov', name: 'Moov Money', badge: 'Moov', color: '#0033A0' },
+    ];
+    const paymentMethods = paymentDefs.map(m => ({
+      ...m,
+      active: m.id === s.paymentMethod,
+      bg: m.id === s.paymentMethod ? '#F6E1E4' : '#FFFFFF',
+      border: m.id === s.paymentMethod ? '#7F011F' : '#E8DCC0',
+      dotBorder: m.id === s.paymentMethod ? '#7F011F' : '#D9CBA0',
+      onClick: () => this.setState({ paymentMethod: m.id }),
+    }));
+
+    const activeCount = s.purchased.length;
+    const monthlySpend = s.purchased.reduce((a, p) => a + p.price, 0);
+    const salesCount = s.sold.reduce((a, v) => a + v.ventes, 0);
+
+    return {
+      activeCount, monthlySpendDisplay: fmt(monthlySpend), salesCount,
+      goBrowse: () => this.setState({ tab: 'browse' }),
+      hasActive: s.purchased.length > 0,
+      isHostEligible: s.kycStatus === 'verified',
+      buyerModeBg: !s.hostMode ? '#7F011F' : 'transparent',
+      buyerModeFg: !s.hostMode ? '#F5EBD0' : '#5A564C',
+      hostModeBg: s.hostMode ? '#7F011F' : 'transparent',
+      hostModeFg: s.hostMode ? '#F5EBD0' : '#5A564C',
+      toggleHostMode: () => {
+        const next = !s.hostMode;
+        this.setState(next ? { hostMode: true, tab: 'profile', profileTab: 'ventes' } : { hostMode: false, tab: 'market' });
+      },
+      recommended: allListings.slice(0, 4),
+      isMarket: s.tab === 'market', isBrowse: s.tab === 'browse', isSell: s.tab === 'sell',
+      isProfile: s.tab === 'profile' && !s.hostMode,
+      isHostView: s.tab === 'profile' && s.hostMode,
+      showBack: s.tab !== 'market',
+      goMarket: () => this.setState({ tab: 'market' }),
+      goSell: () => this.setState({ tab: 'sell', sellSubmitted: false, sellEditingId: null, sellPlan: '', sellPrice: '', sellSeats: 1, sellDesc: '' }),
+      goProfile: () => this.setState({ tab: 'profile' }),
+      marketColor: s.tab === 'market' ? '#7F011F' : '#8A8578',
+      sellColor: s.tab === 'sell' ? '#7F011F' : '#8A8578',
+      profileColor: s.tab === 'profile' ? '#7F011F' : '#8A8578',
+      ventesColor: s.tab === 'profile' && s.hostMode ? '#7F011F' : '#8A8578',
+      notAuthed: !s.authed,
+      isLoginScreen: s.authScreen === 'login', isSignupScreen: s.authScreen === 'signup',
+      goLoginScreen: () => this.setState({ authScreen: 'login' }),
+      goSignupScreen: () => this.setState({ authScreen: 'signup' }),
+      loginTabBg: s.authScreen === 'login' ? '#F5EBD0' : 'transparent',
+      loginTabFg: s.authScreen === 'login' ? '#7F011F' : '#F5EBD0',
+      signupTabBg: s.authScreen === 'signup' ? '#F5EBD0' : 'transparent',
+      signupTabFg: s.authScreen === 'signup' ? '#7F011F' : '#F5EBD0',
+      loginId: s.loginId,
+      setLoginId: (e) => this.setState({ loginId: e.target.value }),
+      loginPassword: s.loginPassword,
+      setLoginPassword: (e) => this.setState({ loginPassword: e.target.value }),
+      login: () => this.setState({ authed: true }),
+      signupName: s.signupName,
+      setSignupName: (e) => this.setState({ signupName: e.target.value }),
+      signupId: s.signupId,
+      setSignupId: (e) => this.setState({ signupId: e.target.value }),
+      signupPassword: s.signupPassword,
+      setSignupPassword: (e) => this.setState({ signupPassword: e.target.value }),
+      signup: () => this.setState({ authed: true }),
+      notifOpen: s.notifOpen,
+      toggleNotif: () => this.setState(prev => ({ notifOpen: !prev.notifOpen })),
+      hasUnread: true,
+      notifications: [
+        { title: 'Place libérée sur Netflix Premium', body: 'Une place vient de se libérer chez Aïcha K. — 3 500 FCFA/mois.' },
+        { title: 'Renouvellement dans 3 jours', body: 'Ton abonnement Disney+ se renouvelle le 12 août 2026.' },
+      ],
+      goVentes: () => this.setState({ tab: 'profile', profileTab: 'ventes', hostMode: true }),
+
+      searchQuery: s.searchQuery,
+      setSearchQuery: (e) => this.setState({ searchQuery: e.target.value }),
+      filters, listings, noResults: listings.length === 0,
+      sortOptions: [{ id: 'default', name: 'Pertinence' }, { id: 'priceAsc', name: 'Prix croissant' }, { id: 'seats', name: 'Plus de places' }].map(o => ({
+        ...o,
+        bg: o.id === s.sortBy ? '#7F011F' : '#FFFFFF',
+        fg: o.id === s.sortBy ? '#F5EBD0' : '#5A564C',
+        border: o.id === s.sortBy ? '#7F011F' : '#E8DCC0',
+        onClick: () => this.setState({ sortBy: o.id }),
+      })),
+
+      selected,
+      closeDetail: () => this.setState({ selectedId: null }),
+      startCheckout: () => this.setState({ checkoutOpen: true, checkoutStep: 1 }),
+      checkoutOpen: s.checkoutOpen,
+      closeCheckout: () => this.setState({ checkoutOpen: false }),
+      checkoutStep: s.checkoutStep,
+      step1: s.checkoutStep === 1, step2: s.checkoutStep === 2, step3: s.checkoutStep === 3,
+      dot1: '#7F011F', dot2: s.checkoutStep >= 2 ? '#7F011F' : '#E8DCC0', dot3: s.checkoutStep >= 3 ? '#7F011F' : '#E8DCC0',
+      goStep2: () => this.setState({ checkoutStep: 2 }),
+      paymentMethods,
+      phoneNumber: s.phoneNumber,
+      setPhoneNumber: (e) => this.setState({ phoneNumber: e.target.value }),
+      payDisabled: !phoneValid,
+      payBtnBg: phoneValid ? '#7F011F' : '#D9CBA0',
+      payBtnOpacity: phoneValid ? 1 : 0.7,
+      confirmPayment: () => {
+        if (!selected || !phoneValid) return;
+        const item = { id: 'p' + Date.now(), service: selected.service, plan: selected.plan, price: selected.price, color: selected.color, status: 'Actif', until: '22 août 2026', accessType: selected.accessType, accessEmail: selected.accessEmail, accessPassword: selected.accessPassword, accessLink: selected.accessLink, sellerRating: null };
+        this.setState(prev => ({
+          checkoutStep: 3,
+          purchased: [item, ...prev.purchased],
+          seatAdjustments: { ...prev.seatAdjustments, [selected.id]: (prev.seatAdjustments[selected.id] || 0) + 1 },
+        }));
+      },
+      finishCheckout: () => {
+        this.setState({ checkoutOpen: false, selectedId: null, tab: 'profile', profileTab: 'achats', phoneNumber: '' });
+        this.showToast('Paiement réussi ✓');
+      },
+
+      serviceOptions: ['Netflix', 'Spotify', 'Canal+', 'YouTube Premium', 'Disney+', 'Apple TV+', 'Autre'],
+      sellService: s.sellService,
+      setSellService: (e) => this.setState({ sellService: e.target.value }),
+      sellPlan: s.sellPlan,
+      setSellPlan: (e) => this.setState({ sellPlan: e.target.value }),
+      sellSeats: s.sellSeats,
+      setSellSeats: (e) => this.setState({ sellSeats: e.target.value }),
+      sellPrice: s.sellPrice,
+      setSellPrice: (e) => this.setState({ sellPrice: e.target.value }),
+      sellDesc: s.sellDesc,
+      setSellDesc: (e) => this.setState({ sellDesc: e.target.value }),
+      sellIsLink, sellIsCredentials,
+      sellAccessLink: s.sellAccessLink,
+      setSellAccessLink: (e) => this.setState({ sellAccessLink: e.target.value }),
+      sellAccessEmail: s.sellAccessEmail,
+      setSellAccessEmail: (e) => this.setState({ sellAccessEmail: e.target.value }),
+      sellAccessPassword: s.sellAccessPassword,
+      setSellAccessPassword: (e) => this.setState({ sellAccessPassword: e.target.value }),
+      sellDisabled: !sellValid,
+      sellBtnBg: sellValid ? '#7F011F' : '#D9CBA0',
+      sellBtnOpacity: sellValid ? 1 : 0.7,
+      sellNotSubmitted: !s.sellSubmitted,
+      sellSubmitted: s.sellSubmitted,
+      lastSellService: s.lastSellService, lastSellPlan: s.lastSellPlan,
+      kycNeeded: s.kycStatus === 'none',
+      kycCheckingSub: s.kycStatus === 'checkingSub',
+      kycVerifiedAndSelling: s.kycStatus === 'verified',
+      subCheckDisabled: !sellAccessValid,
+      subCheckBtnBg: sellAccessValid ? '#7F011F' : '#D9CBA0',
+      subCheckBtnOpacity: sellAccessValid ? 1 : 0.7,
+      verifySubscription: () => { if (!sellAccessValid) return; this.setState({ kycStatus: 'verified' }); this.showToast('Abonnement vérifié ✓'); },
+      kycName: s.kycName, setKycName: (e) => this.setState({ kycName: e.target.value }),
+      kycPhone: s.kycPhone, setKycPhone: (e) => this.setState({ kycPhone: e.target.value }),
+      kycDocUploaded: s.kycDocUploaded, kycDocMissing: !s.kycDocUploaded,
+      toggleKycDoc: () => this.setState(prev => ({ kycDocUploaded: !prev.kycDocUploaded })),
+      kycDocBorder: s.kycDocUploaded ? '#1F8A5D' : '#D9CBA0',
+      kycDocBg: s.kycDocUploaded ? '#F1F7F3' : '#FFFFFF',
+      kycDisabled: !kycValid,
+      kycBtnBg: kycValid ? '#7F011F' : '#D9CBA0',
+      kycBtnOpacity: kycValid ? 1 : 0.7,
+      submitKyc: () => { if (!kycValid) return; this.setState({ kycStatus: 'checkingSub' }); this.showToast('Identité vérifiée ✓'); },
+      isEditingSell: !!s.sellEditingId,
+      sellHeading: s.sellEditingId ? "Modifier l'annonce" : 'Créer ton cercle',
+      sellSubmitLabel: s.sellEditingId ? "Enregistrer les modifications" : "Créer mon cercle",
+      submitSell: () => {
+        if (!sellValid) return;
+        if (s.sellEditingId) {
+          const id = s.sellEditingId;
+          this.setState(prev => ({
+            sold: prev.sold.map(v => v.id === id ? { ...v, service: s.sellService, plan: s.sellPlan, price: Number(s.sellPrice), seats: Number(s.sellSeats), accessType: sellIsLink ? 'link' : 'credentials', accessLink: s.sellAccessLink, accessEmail: s.sellAccessEmail, accessPassword: s.sellAccessPassword } : v),
+            sellEditingId: null, sellPlan: '', sellPrice: '', sellSeats: 1, sellDesc: '', sellAccessLink: '', sellAccessEmail: '', sellAccessPassword: '',
+            tab: 'profile', profileTab: 'ventes',
+          }));
+          this.showToast('Annonce mise à jour ✓');
+          return;
+        }
+        const item = { id: 's' + Date.now(), service: s.sellService, plan: s.sellPlan, price: Number(s.sellPrice), seats: Number(s.sellSeats), color: '#8A8578', ventes: 0, status: 'Active', accessType: sellIsLink ? 'link' : 'credentials', accessLink: s.sellAccessLink, accessEmail: s.sellAccessEmail, accessPassword: s.sellAccessPassword };
+        this.setState(prev => ({ sellSubmitted: true, lastSellService: s.sellService, lastSellPlan: s.sellPlan, sold: [item, ...prev.sold], sellAccessLink: '', sellAccessEmail: '', sellAccessPassword: '' }));
+      },
+      newListing: () => this.setState({ sellSubmitted: false, sellPlan: '', sellPrice: '', sellSeats: 1, sellDesc: '' }),
+      goToVentes: () => this.setState({ sellSubmitted: false, tab: 'profile', profileTab: 'ventes' }),
+      noSales: s.sold.length === 0,
+
+      profileTabs, showAchats: s.profileTab === 'achats', showVentes: s.profileTab === 'ventes', showHistorique: s.profileTab === 'historique',
+      noActive: s.purchased.length === 0,
+      goBrowseFromProfile: () => this.setState({ tab: 'browse' }),
+      purchasedDisplay: s.purchased.map(p => ({ ...p, priceDisplay: fmt(p.price) + '/mois', letter: p.service[0], onClick: () => this.setState({ selectedPurchasedId: p.id }) })),
+      selectedPurchased: s.selectedPurchasedId ? (() => { const p = s.purchased.find(x => x.id === s.selectedPurchasedId); return p ? { ...p, priceDisplay: fmt(p.price) + '/mois', letter: p.service[0], isCredentials: p.accessType === 'credentials', isLink: p.accessType === 'link', hasRated: p.sellerRating != null, notRated: p.sellerRating == null, ratedStarsLabel: p.sellerRating ? '★'.repeat(p.sellerRating) : '' } : null; })() : null,
+      closePurchasedDetail: () => this.setState({ selectedPurchasedId: null }),
+      ratingStars: s.ratingStars,
+      setRatingStars: (n) => this.setState({ ratingStars: n }),
+      ratingComment: s.ratingComment,
+      setRatingComment: (e) => this.setState({ ratingComment: e.target.value }),
+      ratingStarsDisplay: [1, 2, 3, 4, 5].map(n => ({ n, filled: n <= s.ratingStars ? '#B8790A' : '#E8DCC0', onClick: () => this.setState({ ratingStars: n }) })),
+      submitRating: () => {
+        if (!s.selectedPurchasedId || s.ratingStars === 0) return;
+        const id = s.selectedPurchasedId;
+        this.setState(prev => ({ purchased: prev.purchased.map(p => p.id === id ? { ...p, sellerRating: s.ratingStars } : p), ratingStars: 0, ratingComment: '' }));
+        this.showToast('Avis envoyé, merci !');
+      },
+      copyText: (text, label) => {
+        if (navigator.clipboard) navigator.clipboard.writeText(text).catch(() => {});
+        this.showToast(label + ' copié ✓');
+      },
+      copyEmail: () => { if (navigator.clipboard) navigator.clipboard.writeText(s.purchased.find(p => p.id === s.selectedPurchasedId)?.accessEmail || '').catch(() => {}); this.showToast('Email copié ✓'); },
+      copyPassword: () => { if (navigator.clipboard) navigator.clipboard.writeText(s.purchased.find(p => p.id === s.selectedPurchasedId)?.accessPassword || '').catch(() => {}); this.showToast('Mot de passe copié ✓'); },
+      copyLink: () => { if (navigator.clipboard) navigator.clipboard.writeText(s.purchased.find(p => p.id === s.selectedPurchasedId)?.accessLink || '').catch(() => {}); this.showToast('Lien copié ✓'); },
+      contactSeller: () => this.showToast('Message envoyé au vendeur'),
+      cancelSubscription: () => {
+        if (!s.selectedPurchasedId) return;
+        const id = s.selectedPurchasedId;
+        this.setState(prev => ({ purchased: prev.purchased.filter(p => p.id !== id), selectedPurchasedId: null }));
+        this.showToast('Abonnement annulé');
+      },
+      soldDisplay: s.sold.map(v => ({
+        ...v, priceDisplay: fmt(v.price) + '/mois', letter: v.service[0], ventesLabel: v.ventes + (v.ventes === 1 ? ' vente' : ' ventes'),
+        seatsLabel: v.ventes + '/' + (v.seats || v.ventes) + ' places occupées',
+        fillPct: Math.round((v.ventes / (v.seats || v.ventes || 1)) * 100),
+        isFull: v.ventes >= (v.seats || v.ventes),
+        isLastSeat: (v.seats || v.ventes) - v.ventes === 1,
+        revenueDisplay: fmt(v.price * v.ventes) + '/mois',
+        members: (v.members || []).map(m => ({ ...m, dotColor: m.paymentStatus === 'failed' ? '#B8790A' : '#1F8A5D' })),
+        inviteLink: 'https://sub.ci/join/' + v.id,
+        onShareInvite: () => { if (navigator.clipboard) navigator.clipboard.writeText('https://sub.ci/join/' + v.id).catch(() => {}); this.showToast('Lien du cercle copié ✓'); },
+        expanded: s.hostExpandedId === v.id,
+        membersToggleLabel: s.hostExpandedId === v.id ? 'Masquer les membres' : 'Voir les membres',
+        onToggleExpand: () => this.setState(prev => ({ hostExpandedId: prev.hostExpandedId === v.id ? null : v.id })),
+        onAddMember: () => this.showToast('Invitation envoyée pour rejoindre le cercle'),
+        onEdit: () => this.setState({ sellEditingId: v.id, sellService: v.service, sellPlan: v.plan, sellPrice: String(v.price), sellSeats: v.seats || 1, sellDesc: '', sellAccessLink: v.accessLink || '', sellAccessEmail: v.accessEmail || '', sellAccessPassword: v.accessPassword || '', tab: 'sell' }),
+        onDelete: () => { this.setState(prev => ({ sold: prev.sold.filter(x => x.id !== v.id) })); this.showToast('Cercle supprimé'); },
+      })),
+      hostRevenueDisplay: fmt(s.sold.reduce((a, v) => a + v.price * v.ventes, 0)),
+      hostCirclesCount: s.sold.length,
+      hostMembersCount: s.sold.reduce((a, v) => a + v.ventes, 0),
+      hostBalanceDisplay: fmt(s.hostBalance),
+      openWithdraw: () => this.setState({ withdrawOpen: true }),
+      closeWithdraw: () => this.setState({ withdrawOpen: false }),
+      withdrawOpen: s.withdrawOpen,
+      withdrawAmount: s.withdrawAmount,
+      setWithdrawAmount: (e) => this.setState({ withdrawAmount: e.target.value }),
+      withdrawPhone: s.withdrawPhone,
+      setWithdrawPhone: (e) => this.setState({ withdrawPhone: e.target.value }),
+      withdrawOperators: [
+        { id: 'orange', name: 'Orange Money', badge: 'OM', color: '#FF6600' },
+        { id: 'mtn', name: 'MTN MoMo', badge: 'MTN', color: '#FFCC00' },
+        { id: 'moov', name: 'Moov Money', badge: 'Moov', color: '#0033A0' },
+      ].map(m => ({
+        ...m, active: m.id === s.withdrawOperator,
+        bg: m.id === s.withdrawOperator ? '#FFF4F1' : '#FFFFFF',
+        border: m.id === s.withdrawOperator ? '#7F011F' : '#E8DCC0',
+        dotBorder: m.id === s.withdrawOperator ? '#7F011F' : '#D9CBA0',
+        onClick: () => this.setState({ withdrawOperator: m.id }),
+      })),
+      withdrawValid: Number(s.withdrawAmount) > 0 && Number(s.withdrawAmount) <= s.hostBalance && s.withdrawPhone.replace(/\D/g, '').length >= 8,
+      withdrawDisabled: !(Number(s.withdrawAmount) > 0 && Number(s.withdrawAmount) <= s.hostBalance && s.withdrawPhone.replace(/\D/g, '').length >= 8),
+      withdrawBtnBg: (Number(s.withdrawAmount) > 0 && Number(s.withdrawAmount) <= s.hostBalance && s.withdrawPhone.replace(/\D/g, '').length >= 8) ? '#7F011F' : '#D9CBA0',
+      submitWithdraw: () => {
+        const amt = Number(s.withdrawAmount);
+        if (!(amt > 0 && amt <= s.hostBalance && s.withdrawPhone.replace(/\D/g, '').length >= 8)) return;
+        this.setState(prev => ({ hostBalance: prev.hostBalance - amt, withdrawOpen: false, withdrawAmount: '', withdrawPhone: '', withdrawals: [{ id: 'w' + Date.now(), amount: amt, date: "aujourd'hui" }, ...prev.withdrawals] }));
+        this.showToast('Retrait envoyé ✓');
+      },
+      profileName: s.profileName, profileName0: s.profileName[0],
+      openEditProfile: () => this.setState({ editProfileOpen: true, editProfileName: s.profileName, editProfilePhone: s.profilePhone }),
+      closeEditProfile: () => this.setState({ editProfileOpen: false }),
+      editProfileOpen: s.editProfileOpen,
+      editProfileName: s.editProfileName, setEditProfileName: (e) => this.setState({ editProfileName: e.target.value }),
+      editProfilePhone: s.editProfilePhone, setEditProfilePhone: (e) => this.setState({ editProfilePhone: e.target.value }),
+      saveProfile: () => { this.setState({ profileName: s.editProfileName || s.profileName, profilePhone: s.editProfilePhone, editProfileOpen: false }); this.showToast('Profil mis à jour ✓'); },
+      downloadReceipt: () => this.showToast('Reçu téléchargé (PDF)'),
+      hasWithdrawals: s.withdrawals.length > 0,
+      withdrawalsDisplay: s.withdrawals.map(w => ({ ...w, amountDisplay: fmt(w.amount), onReceipt: () => this.showToast('Reçu téléchargé (PDF)') })),
+      hostAlerts: s.sold.flatMap(v => (v.members || []).filter(m => m.paymentStatus === 'failed').map(m => ({ text: m.name + ' — paiement en échec pour ' + v.service + ' (' + v.plan + ')' }))),
+      hasHostAlerts: s.sold.some(v => (v.members || []).some(m => m.paymentStatus === 'failed')),
+      historyDisplay: [
+        ...s.purchased.map(p => ({ label: 'Achat · ' + p.service + ' — ' + p.plan, date: p.until, amountLabel: '-' + fmt(p.price), amountColor: '#7F011F', iconBg: '#F6E1E4', iconColor: '#7F011F', iconPath: 'M4 11l8-7 8 7v8a1 1 0 01-1 1h-4v-6h-6v6H5a1 1 0 01-1-1v-8z' })),
+        ...s.sold.map(v => ({ label: 'Vente · ' + v.service + ' — ' + v.plan, date: v.ventes + (v.ventes === 1 ? ' vente' : ' ventes'), amountLabel: '+' + fmt(v.price), amountColor: '#1F8A5D', iconBg: '#F1F7F3', iconColor: '#1F8A5D', iconPath: 'M12 5v14M5 12h14' })),
+      ],
+
+      toast: s.toast,
+    };
+  }
+}
+
+</script>
+</body>
+</html>
