@@ -2,13 +2,13 @@
 FROM composer:2 AS vendor
 WORKDIR /app
 COPY composer.json composer.lock ./
-RUN composer install --no-dev --no-interaction --no-scripts --optimize-autoloader
+RUN composer install --no-dev --no-interaction --no-scripts --optimize-autoloader --ignore-platform-req=ext-intl
 
 FROM php:8.3-cli
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-        libpq-dev libsqlite3-dev libzip-dev unzip git \
-    && docker-php-ext-install pdo pdo_pgsql pdo_sqlite zip \
+        libpq-dev libsqlite3-dev libzip-dev libicu-dev unzip git \
+    && docker-php-ext-install pdo pdo_pgsql pdo_sqlite zip intl \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /var/www/html
